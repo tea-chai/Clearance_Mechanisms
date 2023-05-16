@@ -106,9 +106,9 @@ def main(numUsers, ratUsers):
 	prosumer_pros_con_Total =0;
 
 
-	File_Path_Generated  = "/Users/user/Desktop/_CODES/Data-Generation-main/PV-Data-Generation/PV_Generated_4KWp_7_July.csv"
-	File_Path_Consumed= "/Users/user/Desktop/_CODES/Data-Generation-main/Household-Data-Generation/seller_7_July.csv"
-	File_Path_Buyer= "/Users/user/Desktop/_CODES/Data-Generation-main/Household-Data-Generation/buyer_7_July.csv"
+	File_Path_Generated  = "./PV_Generated_4KWp_7_July.csv"
+	File_Path_Consumed= "./seller_7_July.csv"
+	File_Path_Buyer= "./buyer_7_July.csv"
 	
 
 	df_gen = pd.read_csv(File_Path_Generated,sep = ',',low_memory=False)		
