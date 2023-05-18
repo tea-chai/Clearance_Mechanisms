@@ -83,8 +83,8 @@ def main(numUsers, ratUsers):
 	percentageSellers = ratUsers;
 	percentageBuyers = 100 - ratUsers;
 
-	numProsumers = int(numUsers * percentageSellers /100) ;
-	numBuyers = int (numUsers * percentageBuyers /100 );
+	numProsumers = int(numUsers * percentageSellers /100);
+	numBuyers = int (numUsers * percentageBuyers /100);
 
 	#print("numProsumers",numProsumers);
 	#print("numBuyers",numBuyers);	
@@ -95,10 +95,13 @@ def main(numUsers, ratUsers):
 	
 	BuyerRat_Total = 0;
 	BuyerRat_P2P = 0;
-	isSeller_Total =0;
+
+	
 	numProsumers_Total = 0;
+
 	prosumer_consumer_gen_Total = 0;
 	prosumer_consumer_con_Total = 0;
+
 	maxAmounts_updated_Total = 0 ;
 	maxAmounts_Total = 0 ;
 
@@ -185,7 +188,7 @@ def main(numUsers, ratUsers):
 		if(len(maxAmounts_updated)!=0):
 			maxAmounts_updated_Total += sum(maxAmounts_updated)
 			maxAmounts_Total += TotalSupply;
-			#PFET(maxAmounts_updated, numBuyers);
+			Total_P2P_Profit = PFET(maxAmounts_updated, numBuyers);
 		
 		if(UseBattery):
 			maxAmounts_updated_index = 0; 
@@ -215,7 +218,7 @@ def main(numUsers, ratUsers):
 	Buyer_P2P_ratio = BuyerRat_P2P/BuyerRat_Total *100
 	consumer_ratio = (numProsumers_Total-isSeller_Total)/numProsumers_Total *100
 	prosumer_consumer_ratio = prosumer_consumer_gen_Total/prosumer_consumer_con_Total*100
-	prosumer_seller_ratio = maxAmounts_updated_Total/maxAmounts_Total*100
+	prosumer_seller_ratio = maxAmounts_updated_Total/maxAmounts_Total * 100
 	
 
 	
@@ -266,10 +269,13 @@ def PFET(maxAmounts, numBuyers):
 		
 		if(exit==1):
 
-			Total_Profit = 0;
+			Total_P2P_Profit = 0;
 			
 			for seller in range(0,numSellers):	
-				Total_Profit += maxAmounts[seller]* prices[seller];
+				Total_P2P_Profit += maxAmounts[seller]* prices[seller];
+			
+			
+			return Total_P2P_Profit;
 					
 			'''
 			print("Total_Profit",Total_Profit);				
@@ -286,7 +292,7 @@ def PFET(maxAmounts, numBuyers):
 			#plotStates();
 			#plotPrices();				
 			
-			break;
+			
 
 def evolutionaryGame(numSellers, numBuyers, prices,states):		
 	
@@ -342,7 +348,7 @@ if __name__ == '__main__':
 	
 	main(40,25)
 
-	
+	'''
 	main(80,25)
 	main(120,25)
 	main(160,25)
@@ -359,7 +365,7 @@ if __name__ == '__main__':
 	main(120,75)
 	main(160,75)
 	main(200,75)
-	
+	'''
 
 
 	
