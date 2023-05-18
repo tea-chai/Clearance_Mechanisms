@@ -13,7 +13,7 @@ import sys
 
 numToPlot = 0;
 Total_TIME = 24;
-UseBattery = True;
+UseBattery = False;
 
 Theta_p = Theta = 5
 Nu2=0.15
@@ -93,11 +93,14 @@ def main(numUsers, ratUsers):
 	maxAmounts=[];
 	sellerDemands=[];
 	
+	total_Pro_Profit = 0;
+
 	BuyerRat_Total = 0;
 	BuyerRat_P2P = 0;
 
-	
+	 
 	numProsumers_Total = 0;
+	isSeller_Total = 0;
 
 	prosumer_consumer_gen_Total = 0;
 	prosumer_consumer_con_Total = 0;
@@ -132,6 +135,7 @@ def main(numUsers, ratUsers):
 	
 	
 	for time in range(0, Total_TIME):
+		#print('time',time)
 
 		clearPlots()
 
@@ -180,6 +184,7 @@ def main(numUsers, ratUsers):
 			maxAmounts_updated = [TotalDemand * amount/ TotalSupply for amount in maxAmounts]	
 			#print('maxAmounts_updated_sum',sum(maxAmounts_updated))		 
 			#print('TotalDemand',TotalDemand)
+			#print("Oversupply")
 		else:
 			maxAmounts_updated = maxAmounts;
 
@@ -188,7 +193,14 @@ def main(numUsers, ratUsers):
 		if(len(maxAmounts_updated)!=0):
 			maxAmounts_updated_Total += sum(maxAmounts_updated)
 			maxAmounts_Total += TotalSupply;
-			Total_P2P_Profit = PFET(maxAmounts_updated, numBuyers);
+			#print("PFET")
+			if(sum(maxAmounts_updated)>0.002):
+				Total_P2P_Profit = PFET(maxAmounts_updated, numBuyers);
+				total_Pro_Profit = + Total_P2P_Profit;
+			
+
+			if(TotalSupply>TotalDemand):
+				total_Pro_Profit = + (TotalSupply - TotalDemand) * FiT;
 		
 		if(UseBattery):
 			maxAmounts_updated_index = 0; 
@@ -221,8 +233,8 @@ def main(numUsers, ratUsers):
 	prosumer_seller_ratio = maxAmounts_updated_Total/maxAmounts_Total * 100
 	
 
-	
-	print(prosumer_seller_ratio)
+	print(total_Pro_Profit)
+	#print(prosumer_seller_ratio)
 	#print('battery',battery);
 
 def PFET(maxAmounts, numBuyers):
@@ -346,9 +358,10 @@ def evolutionaryGame(numSellers, numBuyers, prices,states):
 if __name__ == '__main__':
 
 	
+	
 	main(40,25)
 
-	'''
+
 	main(80,25)
 	main(120,25)
 	main(160,25)
@@ -365,7 +378,8 @@ if __name__ == '__main__':
 	main(120,75)
 	main(160,75)
 	main(200,75)
-	'''
+	
+	
 
 
 	
