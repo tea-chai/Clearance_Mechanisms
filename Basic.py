@@ -36,7 +36,7 @@ demand0=[]; demand1=[];demand2=[];demand3=[];demand4=[];demand5=[];demand6=[];de
 state0=[]; state1=[];state2=[];state3=[];state4=[];state5=[];state6=[];state7=[];state8=[];state9=[];
 price0=[]; price1=[];price2=[];price3=[];price4=[];price5=[];price6=[];price7=[];price8=[];price9=[];
 
-
+'''
 def appendPrices(prices):
     for i in range(numToPlot):
         globals()[f"price{i}"].append(prices[i])
@@ -85,6 +85,7 @@ def plotPrices():
 	plt_price.ylabel("Power Price (cents / kWh)")
 	plt_price.show()
 	
+'''
 def main():  
 
 	print("numProsumers",numProsumers);
@@ -113,6 +114,7 @@ def main():
 	df_buy = pd.read_csv(File_Path_Buyer,sep = ',',low_memory=False)
 	df_buy = df_buy.iloc[: , 2:]
 	
+	quit();
 
 	battery = [2 for i in range(numProsumers)]
 	print('battery',battery);
