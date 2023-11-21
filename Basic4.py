@@ -118,7 +118,7 @@ def main(numUsers, ratUsers):
 	battInit = 2 if UseBattery else 0
 
 	battery_charged = [battInit for i in range(numProsumers)]
-	
+	quit("Finito")
 	for time in range(0, Total_TIME):
 		#print('time',time)
 
@@ -138,7 +138,7 @@ def main(numUsers, ratUsers):
 
 		isSeller = [excess >= 0 for excess in excess_Energy]
 
-		numSeller_Total +=sum(isSeller);
+		numSeller_Total =sum(isSeller);
 		numProsumers_Total += numProsumers;
 
 		#print('isSeller',isSeller)
@@ -310,7 +310,7 @@ def buyers_algorithm(prices, thetas, lambdas, gammas):
 if __name__ == '__main__':
 
 	main(20,50)
-	
+	print("Hello")
 	#main(100,50)
 
 
