@@ -31,6 +31,7 @@ state0=[]; state1=[];state2=[];state3=[];state4=[];state5=[];state6=[];state7=[]
 price0=[]; price1=[];price2=[];price3=[];price4=[];price5=[];price6=[];price7=[];price8=[];price9=[];
 
 
+
 def appendPrices(prices):
     for i in range(numToPlot):
         globals()[f"price{i}"].append(prices[i])
@@ -84,8 +85,8 @@ def main(numUsers, ratUsers):
 	percentageSellers = ratUsers;
 	percentageBuyers = 100 - ratUsers;
 
-	numProsumers = int(numUsers * percentageSellers /100);
-	numBuyers = int (numUsers * percentageBuyers /100);
+	numProsumers = int(numUsers * percentageSellers / 100);
+	numBuyers = int (numUsers * percentageBuyers / 100);
 	
 	total_Pro_Profit = 0;
 
@@ -118,7 +119,7 @@ def main(numUsers, ratUsers):
 	battInit = 2 if UseBattery else 0
 
 	battery_charged = [battInit for i in range(numProsumers)]
-	quit("Finito")
+	
 	for time in range(0, Total_TIME):
 		#print('time',time)
 
