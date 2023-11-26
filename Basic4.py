@@ -103,18 +103,18 @@ def main(numUsers, ratUsers):
 	
 
 	File_Path_Generated  = "./PV_Generated_4KWp_7_July.csv"
-	File_Path_Consumed= "./seller_7_July.csv"
-	File_Path_Buyer= "./buyer_7_July.csv"
+	File_Path_Seller_Consumed= "./seller_7_July.csv"
+	File_Path_Buyer_Consumed= "./buyer_7_July.csv"
 	
 
 	df_gen = pd.read_csv(File_Path_Generated,sep = ',',low_memory=False)		
 	df_gen = df_gen.iloc[: , 2:]
 	
-	df_con = pd.read_csv(File_Path_Consumed,sep = ',',low_memory=False)
-	df_con = df_con.iloc[: , 2:]
+	df_seller_con = pd.read_csv(File_Path_Seller_Consumed,sep = ',',low_memory=False)
+	df_seller_con = df_seller_con.iloc[: , 2:]
 
-	df_buy = pd.read_csv(File_Path_Buyer,sep = ',',low_memory=False)
-	df_buy = df_buy.iloc[: , 2:]
+	df_buyer_con = pd.read_csv(File_Path_Buyer_Consumed,sep = ',',low_memory=False)
+	df_buyer_con = df_buyer_con.iloc[: , 2:]
 	
 	battInit = 2 if UseBattery else 0
 
@@ -126,8 +126,8 @@ def main(numUsers, ratUsers):
 		clearPlots()
 
 		V_gen = df_gen.iloc[time].to_numpy()[0:numProsumers]
-		V_con = df_con.iloc[time].to_numpy()[0:numProsumers]
-		V_buy = df_buy.iloc[time].to_numpy()[0:numBuyers]
+		V_seller_con = df_seller_con.iloc[time].to_numpy()[0:numProsumers]
+		V_buyer_con = df_buyer_con.iloc[time].to_numpy()[0:numBuyers]
 	
 		'''
 		print(V_gen[0:10])
@@ -135,12 +135,12 @@ def main(numUsers, ratUsers):
 		print(V_buy[0:210])
 		'''
 		
-		excess_Energy = [battery_charged [i] + V_gen[i] - V_con[i] for i in range(numProsumers)]
+		excess_Energy = [battery_charged [i] + V_gen[i] - V_seller_con[i] for i in range(numProsumers)]
 
 		isSeller = [excess >= 0 for excess in excess_Energy]
 
-		numSeller_Total =sum(isSeller);
-		numProsumers_Total += numProsumers;
+		#numSeller_Total =sum(isSeller);
+		#numProsumers_Total += numProsumers;
 
 		#print('isSeller',isSeller)
 		#print('supplies',supplies)
