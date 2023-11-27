@@ -100,18 +100,18 @@ def main(numUsers, ratProsumers):
 		
 	 
 	BuyerFromSupp = BuyersTotalDemand  - BuyerFromP2P
-	consumer_ratio = (numProsumers_Total-isSeller_Total)/numProsumers_Total *100
+	consumer_ratio = (isSeller_Total)/numProsumers_Total *100
 	prosumer_seller_toGrid = Overall_Total_Supplies - prosumer_seller_ToP2P
 		
 
 	#print(BuyerFromP2P)
 	#print(BuyerFromSupp)
-	#print(consumer_ratio)
+	print(consumer_ratio)
 	#print(prosumer_seller_ToP2P)
 	#print(prosumer_seller_toGrid)
 
 	#print(prosumer_consumer_from_Self);
-	print(prosumer_consumer_from_Supp);
+	#print(prosumer_consumer_from_Supp);
 
 
 
