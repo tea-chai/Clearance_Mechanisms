@@ -110,8 +110,8 @@ def main(numUsers, ratUsers):
 	df_gen = pd.read_csv(File_Path_Generated,sep = ',',low_memory=False)		
 	df_gen = df_gen.iloc[: , 2:]
 	
-	df_seller_con = pd.read_csv(File_Path_Seller_Consumed,sep = ',',low_memory=False)
-	df_seller_con = df_seller_con.iloc[: , 2:]
+	df_prosumer_con = pd.read_csv(File_Path_Seller_Consumed,sep = ',',low_memory=False)
+	df_prosumer_con = df_prosumer_con.iloc[: , 2:]
 
 	df_buyer_con = pd.read_csv(File_Path_Buyer_Consumed,sep = ',',low_memory=False)
 	df_buyer_con = df_buyer_con.iloc[: , 2:]
@@ -126,7 +126,7 @@ def main(numUsers, ratUsers):
 		clearPlots()
 
 		V_gen = df_gen.iloc[time].to_numpy()[0:numProsumers]
-		V_seller_con = df_seller_con.iloc[time].to_numpy()[0:numProsumers]
+		V_prosumer_con = df_prosumer_con.iloc[time].to_numpy()[0:numProsumers]
 		V_buyer_con = df_buyer_con.iloc[time].to_numpy()[0:numBuyers]
 	
 		'''
@@ -135,9 +135,9 @@ def main(numUsers, ratUsers):
 		print(V_buy[0:210])
 		'''
 		
-		excess_Energy = [battery_charged [i] + V_gen[i] - V_seller_con[i] for i in range(numProsumers)]
+		excess_Energy = [battery_charged [i] + V_gen[i] - V_prosumer_con[i] for i in range(numProsumers)]
 
-		isSeller = [excess >= 0 for excess in excess_Energy]
+		Prosumer_isSellerArr = [excess >= 0 for excess in excess_Energy]
 
 		#numSeller_Total =sum(isSeller);
 		#numProsumers_Total += numProsumers;
@@ -149,19 +149,19 @@ def main(numUsers, ratUsers):
 		
 		Supplies= []
 
-		for i, x in enumerate(excess_Energy):
-			if isSeller[i]: # Seller
+		for i in range(numProsumers):
+			if Prosumer_isSellerArr[i]: # Seller
 				
-				Supplies.append(x)
+				Supplies.append(excess_Energy(i))
 
 			else: # consumer
 				
 				prosumer_consumer_gen_Total += V_gen[i] + battery_charged [i]
-				prosumer_consumer_con_Total += V_con[i]
+				prosumer_consumer_con_Total += V_prosumer_con[i]
 	
 	
 		TotalSupply = sum(Supplies);
-		TotalDemand = sum(V_buy);
+		TotalDemand = sum(V_buyer_con);
 
 		if(TotalSupply>TotalDemand):
 			Supplies_updated = [TotalDemand * amount/ TotalSupply for amount in Supplies]	
@@ -177,15 +177,16 @@ def main(numUsers, ratUsers):
 			Total_Supplies_updated += sum(Supplies_updated)
 			
 			#print("PFET")
-			if(sum(Total_Supplies_updated)>0.002):
-				Total_P2P_Profit = PFET(Total_Supplies_updated, numBuyers);
-				total_Pro_Profit = + Total_P2P_Profit;	
+			#if(sum(Total_Supplies_updated)>0.002):
+			#	Total_P2P_Profit = PFET(Total_Supplies_updated, numBuyers);
+			#	total_Pro_Profit = + Total_P2P_Profit;	
 		
 		#BURADAN DEVAM
+		'''
 		if(UseBattery):
 			maxAmounts_updated_index = 0; 
 			for i in range(numProsumers):
-				if(isSeller[i]):
+				if(Prosumer_isSellerArr[i]):
 					battery_charged[i] = min(20, max(0, battery_charged [i] + V_gen[i] - V_con[i] - Supplies_updated[maxAmounts_updated_index])) 
 					total_Pro_Profit = + max(0, battery_charged [i] + V_gen[i] - V_con[i] - Supplies_updated[maxAmounts_updated_index]);
 					maxAmounts_updated_index +=1					 
@@ -194,7 +195,7 @@ def main(numUsers, ratUsers):
 		else:
 			if(TotalSupply > TotalDemand):
 				total_Pro_Profit = + (TotalSupply - TotalDemand) * FiT;
-		
+		'''
 		#print("maxAmounts",maxAmounts)
 		BuyerRat_Total += TotalDemand;
 
@@ -216,7 +217,7 @@ def main(numUsers, ratUsers):
 	
 	
 
-	print(total_Pro_Profit)
+	#print(total_Pro_Profit)
 	#print(prosumer_seller_ratio)
 	#print('battery',battery);
 
