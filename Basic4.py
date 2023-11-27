@@ -90,8 +90,8 @@ def main(numUsers, ratUsers):
 	
 	total_Pro_Profit = 0;
 
-	BuyerRat_Total = 0;
-	BuyerRat_P2P = 0;
+	BuyersTotalDemand = 0;
+	BuyerFromP2P = 0;
  
 	numProsumers_Total = 0;
 	isSeller_Total = 0;
@@ -99,16 +99,18 @@ def main(numUsers, ratUsers):
 	prosumer_consumer_gen_Total = 0;
 	prosumer_consumer_con_Total = 0;
 
-	Total_Supplies_updated = 0 ;
+	Total_Supplies_to_P2P = 0 ;
+	Overall_Total_Supplies = 0;
 	
 
-	File_Path_Generated  = "./PV_Generated_4KWp_7_July.csv"
-	File_Path_Seller_Consumed= "./seller_7_July.csv"
-	File_Path_Buyer_Consumed= "./buyer_7_July.csv"
+	File_Path_Generated  = "./PV_Generated_4KWp_21_April.csv"
+	File_Path_Seller_Consumed= "./prosumer_21_April.csv"
+	File_Path_Buyer_Consumed= "./buyer_21_April.csv"
 	
 
 	df_gen = pd.read_csv(File_Path_Generated,sep = ',',low_memory=False)		
 	df_gen = df_gen.iloc[: , 2:]
+	
 	
 	df_prosumer_con = pd.read_csv(File_Path_Seller_Consumed,sep = ',',low_memory=False)
 	df_prosumer_con = df_prosumer_con.iloc[: , 2:]
@@ -117,7 +119,8 @@ def main(numUsers, ratUsers):
 	df_buyer_con = df_buyer_con.iloc[: , 2:]
 	
 	battInit = 2 if UseBattery else 0
-
+	
+	
 	battery_charged = [battInit for i in range(numProsumers)]
 	
 	for time in range(0, Total_TIME):
@@ -129,30 +132,37 @@ def main(numUsers, ratUsers):
 		V_prosumer_con = df_prosumer_con.iloc[time].to_numpy()[0:numProsumers]
 		V_buyer_con = df_buyer_con.iloc[time].to_numpy()[0:numBuyers]
 	
-		'''
+		
+		
+		
+		'''		
+		print(V_prosumer_con[0:15])
+		print(V_buyer_con[0:10])
 		print(V_gen[0:10])
-		print(V_con[0:10])
-		print(V_buy[0:210])
+
+		
 		'''
 		
 		excess_Energy = [battery_charged [i] + V_gen[i] - V_prosumer_con[i] for i in range(numProsumers)]
 
 		Prosumer_isSellerArr = [excess >= 0 for excess in excess_Energy]
 
-		#numSeller_Total =sum(isSeller);
-		#numProsumers_Total += numProsumers;
+		
+		isSeller_Total +=sum(Prosumer_isSellerArr);
+		numProsumers_Total += numProsumers;
 
+		
 		#print('isSeller',isSeller)
 		#print('supplies',supplies)
 		#print('isSeller',isSeller)
 	
-		
+	
 		Supplies= []
 
 		for i in range(numProsumers):
 			if Prosumer_isSellerArr[i]: # Seller
 				
-				Supplies.append(excess_Energy(i))
+				Supplies.append(excess_Energy[i])
 
 			else: # consumer
 				
@@ -161,7 +171,9 @@ def main(numUsers, ratUsers):
 	
 	
 		TotalSupply = sum(Supplies);
+		Overall_Total_Supplies += TotalSupply;
 		TotalDemand = sum(V_buyer_con);
+		BuyersTotalDemand += TotalDemand
 
 		if(TotalSupply>TotalDemand):
 			Supplies_updated = [TotalDemand * amount/ TotalSupply for amount in Supplies]	
@@ -174,7 +186,7 @@ def main(numUsers, ratUsers):
 		#print('maxAmounts_updated', maxAmounts_updated);
 
 		if(len(Supplies_updated)!=0):
-			Total_Supplies_updated += sum(Supplies_updated)
+			Total_Supplies_to_P2P += sum(Supplies_updated)
 			
 			#print("PFET")
 			#if(sum(Total_Supplies_updated)>0.002):
@@ -197,29 +209,31 @@ def main(numUsers, ratUsers):
 				total_Pro_Profit = + (TotalSupply - TotalDemand) * FiT;
 		'''
 		#print("maxAmounts",maxAmounts)
-		BuyerRat_Total += TotalDemand;
+		
 
-		BuyerRat_P2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
-		'''
-		print('TIME',time)
-		print("TotalSupply",TotalSupply)
-		print("total demand",TotalDemand)
-		print('BuyerRat_P2P',BuyerRat_P2P)
-		print("P2P ratio",BuyerRat_P2P/BuyerRat_Total *100)
-		print("BuyerRat_Total",BuyerRat_Total)
-		print('\n')
-		'''
+		BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
+		
 
 	
-	Buyer_P2P_ratio = BuyerRat_P2P/BuyerRat_Total *100
+	
+
+	 
+	BuyerFromSupp = BuyersTotalDemand  - BuyerFromP2P
 	consumer_ratio = (numProsumers_Total-isSeller_Total)/numProsumers_Total *100
-	prosumer_consumer_ratio = prosumer_consumer_gen_Total/prosumer_consumer_con_Total*100
-	
+	prosumer_seller_ToP2P = Total_Supplies_to_P2P
+	prosumer_seller_toSupp = Overall_Total_Supplies - prosumer_seller_ToP2P
+	prosumer_consumer_from_Self = prosumer_consumer_gen_Total
+	prosumer_consumer_from_Supp = prosumer_consumer_con_Total - prosumer_consumer_gen_Total
 	
 
-	#print(total_Pro_Profit)
-	#print(prosumer_seller_ratio)
-	#print('battery',battery);
+	print(BuyerFromP2P)
+	print(BuyerFromSupp)
+	print(consumer_ratio)
+	print(prosumer_seller_ToP2P)
+	print(prosumer_seller_toSupp)
+
+	print(prosumer_consumer_from_Self);
+	print(prosumer_consumer_from_Supp);
 
 def PFET(maxAmounts, numBuyers):
 
@@ -312,7 +326,7 @@ def buyers_algorithm(prices, thetas, lambdas, gammas):
 if __name__ == '__main__':
 
 	main(20,50)
-	print("Hello")
+	print("Finished!")
 	#main(100,50)
 
 
