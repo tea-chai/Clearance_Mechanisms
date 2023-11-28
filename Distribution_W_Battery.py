@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 import random
-import sys
+import sys	
 
 Total_TIME = 24;
 
@@ -33,9 +33,9 @@ def main(numUsers, ratProsumers):
 	prosumer_consumer_from_Self = 0;
 	prosumer_consumer_from_Supp = 0;
 
-	File_Path_Generated  = "./PV_Generated_4KWp_21_April.csv"
-	File_Path_Seller_Consumed= "./prosumer_21_April.csv"
-	File_Path_Buyer_Consumed= "./buyer_21_April.csv"
+	File_Path_Generated  = "./PV_Generated_4KWp_August.csv"
+	File_Path_Seller_Consumed= "./prosumer_August.csv"
+	File_Path_Buyer_Consumed= "./buyer_August.csv"
 	
 	df_gen = pd.read_csv(File_Path_Generated,sep = ',',low_memory=False)		
 	df_gen = df_gen.iloc[: , 2:]
