@@ -11,7 +11,7 @@ import pandas as pd
 import random
 import sys
 
-Total_TIME = 8784;
+Total_TIME = 744;
 
 def main(numUsers, ratProsumers):  
 
@@ -33,9 +33,9 @@ def main(numUsers, ratProsumers):
 	prosumer_consumer_from_Self = 0;
 	prosumer_consumer_from_Supp = 0;
 
-	File_Path_Generated  = "./PV_Generated_4KWp.csv"
-	File_Path_Seller_Consumed= "./prosumer.csv"
-	File_Path_Buyer_Consumed= "./buyer.csv"
+	File_Path_Generated  = "./PV_Generated_4KWp_January.csv"
+	File_Path_Seller_Consumed= "./prosumer_January.csv"
+	File_Path_Buyer_Consumed= "./buyer_January.csv"
 	
 	df_gen = pd.read_csv(File_Path_Generated,sep = ',',low_memory=False)		
 	df_gen = df_gen.iloc[: , 2:]
@@ -105,13 +105,13 @@ def main(numUsers, ratProsumers):
 		
 
 	#print(BuyerFromP2P)
-	#print(BuyerFromSupp)
+	print(BuyerFromSupp)
 	#print(consumer_ratio)
 	#print(prosumer_seller_ToP2P)
 	#print(prosumer_seller_toGrid)
 
 	#print(prosumer_consumer_from_Self);
-	print(prosumer_consumer_from_Supp);
+	#print(prosumer_consumer_from_Supp);
 
 
 
