@@ -11,7 +11,8 @@ import pandas as pd
 import random
 import sys	
 
-Total_TIME = 8784;
+Total_TIME = 24;
+
 Max_BATTERY = 20;
 
 def main(numUsers, ratProsumers):  
@@ -48,7 +49,7 @@ def main(numUsers, ratProsumers):
 	df_buyer_con = pd.read_csv(File_Path_Buyer_Consumed,sep = ',',low_memory=False)
 	df_buyer_con = df_buyer_con.iloc[: , 2:]
 	
-	battInit = 0
+	battInit = 0.2
 	
 	
 	battery_charged = [battInit for i in range(numProsumers)]
