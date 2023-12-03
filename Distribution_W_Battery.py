@@ -11,7 +11,8 @@ import pandas as pd
 import random
 import sys	
 
-Total_TIME = 24;
+Total_TIME = 8784;
+Max_BATTERY = 20;
 
 def main(numUsers, ratProsumers):  
 
@@ -21,6 +22,7 @@ def main(numUsers, ratProsumers):
 	numProsumers = int(numUsers * percentageProsumers / 100);
 	numBuyers = int (numUsers * percentageBuyers / 100);
 	
+	prosumer_seller_toGrid_Addition = 0 ;
 	BuyersTotalDemand = 0;
 	BuyerFromP2P = 0;
  
@@ -101,34 +103,43 @@ def main(numUsers, ratProsumers):
 			prosumer_seller_ToP2P += sum(Supplies_to_P2P)		
 
 		BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
-
+		
 		for i in range(numProsumers):
 			if Prosumer_isSellerArr[i]: # Seller
-				if(Supplies_to_P2P[i]<V_gen[i]):
-					battery_charged[i] += min(20,V_gen[i] - Supplies_to_P2P[i]);
+				
+				potential_charge = self_power[i] - V_prosumer_con [i]- Supplies_to_P2P[i]
+				
+					
+				if(potential_charge<Max_BATTERY):
+					
+					battery_charged[i] = potential_charge;
 				else:
-					battery_charged[i] -=  battery_charged[i] + V_gen[i] - Supplies_to_P2P[i]
-
+					#print('ALERT!')
+					#quit('ALERT')
+					battery_charged[i]= Max_BATTERY;
+					prosumer_seller_toGrid_Addition += potential_charge - Max_BATTERY;
+					
 			else: # consumer
 				
 				battery_charged[i]=0
-		
+			
 	 
 	BuyerFromSupp = BuyersTotalDemand  - BuyerFromP2P
-	consumer_ratio = (isSeller_Total)/numProsumers_Total *100
-	prosumer_seller_toGrid = Overall_Total_Supplies - prosumer_seller_ToP2P
+	seller_ratio = (isSeller_Total)/numProsumers_Total *100
+	prosumer_seller_toGrid = Overall_Total_Supplies - prosumer_seller_ToP2P + prosumer_seller_toGrid_Addition
 		
 
 	#print(BuyerFromP2P)
 	#print(BuyerFromSupp)
-	print(consumer_ratio)
+	print(seller_ratio)
 	#print(prosumer_seller_ToP2P)
 	#print(prosumer_seller_toGrid)
 
 	#print(prosumer_consumer_from_Self);
 	#print(prosumer_consumer_from_Supp);
-
-
+	#print('battery charged')
+	#for i in range(numProsumers):
+	#	print(battery_charged[i])
 
 if __name__ == '__main__':
 
