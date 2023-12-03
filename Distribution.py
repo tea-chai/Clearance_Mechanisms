@@ -62,7 +62,7 @@ def main(numUsers, ratProsumers):
 		
 		energyDifference = [V_gen[i] - V_prosumer_con[i] for i in range(numProsumers)]
 
-		Prosumer_isSellerArr = [diff >= 0 for diff in energyDifference]	
+		Prosumer_isSellerArr = [diff > 0 for diff in energyDifference]	
 
 		isSeller_Total +=sum(Prosumer_isSellerArr);		
 		numProsumers_Total += numProsumers;

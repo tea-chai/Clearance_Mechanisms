@@ -11,7 +11,7 @@ import pandas as pd
 import random
 import sys	
 
-Total_TIME = 24;
+Total_TIME = 8784;
 
 Max_BATTERY = 20;
 
@@ -36,9 +36,9 @@ def main(numUsers, ratProsumers):
 	prosumer_consumer_from_Self = 0;
 	prosumer_consumer_from_Supp = 0;
 
-	File_Path_Generated  = "./PV_Generated_4KWp_21_April.csv"
-	File_Path_Seller_Consumed= "./prosumer_21_April.csv"
-	File_Path_Buyer_Consumed= "./buyer_21_April.csv"
+	File_Path_Generated  = "./PV_Generated_4KWp.csv"
+	File_Path_Seller_Consumed= "./prosumer.csv"
+	File_Path_Buyer_Consumed= "./buyer.csv"
 	
 	df_gen = pd.read_csv(File_Path_Generated,sep = ',',low_memory=False)		
 	df_gen = df_gen.iloc[: , 2:]
@@ -49,14 +49,17 @@ def main(numUsers, ratProsumers):
 	df_buyer_con = pd.read_csv(File_Path_Buyer_Consumed,sep = ',',low_memory=False)
 	df_buyer_con = df_buyer_con.iloc[: , 2:]
 	
-	battInit = 0.2
+	battInit = 0
 	
 	
 	battery_charged = [battInit for i in range(numProsumers)]
 	
 	for time in range(0, Total_TIME):
+	
 
+		#print("***** TIME ",time,'*****' )
 
+		#print('battery_charged',battery_charged)
 		V_gen = df_gen.iloc[time].to_numpy()[0:numProsumers]
 		V_prosumer_con = df_prosumer_con.iloc[time].to_numpy()[0:numProsumers]
 		V_buyer_con = df_buyer_con.iloc[time].to_numpy()[0:numBuyers]
@@ -66,11 +69,15 @@ def main(numUsers, ratProsumers):
 		print(V_buyer_con[0:10])
 		print(V_gen[0:10])		
 		'''
+		#print('V_gen',V_gen)
+		#print('V_prosumer_con',V_prosumer_con)
+		#print('V_buyer_con',V_buyer_con)
 		self_power = [V_gen[i] + battery_charged[i] for i in range(numProsumers)]
 		energyDifference = [self_power[i] - V_prosumer_con[i] for i in range(numProsumers)]
 
-		Prosumer_isSellerArr = [diff >= 0 for diff in energyDifference]	
+		Prosumer_isSellerArr = [diff > 0 for diff in energyDifference]	
 
+		#print('Prosumer_isSellerArr',Prosumer_isSellerArr)
 		isSeller_Total +=sum(Prosumer_isSellerArr);		
 		numProsumers_Total += numProsumers;
 	
@@ -98,7 +105,7 @@ def main(numUsers, ratProsumers):
 		else:
 			Supplies_to_P2P = Supplies;
 
-		
+		#print('Supplies_to_P2P',Supplies_to_P2P)
 
 		if((Supplies_to_P2P)):
 			prosumer_seller_ToP2P += sum(Supplies_to_P2P)		
@@ -121,8 +128,11 @@ def main(numUsers, ratProsumers):
 					prosumer_seller_toGrid_Addition += potential_charge - Max_BATTERY;
 					
 			else: # consumer
-				
+				#print('here')
 				battery_charged[i]=0
+
+		if(time==7439):
+			print('battery_charged',battery_charged)
 			
 	 
 	BuyerFromSupp = BuyersTotalDemand  - BuyerFromP2P
@@ -132,18 +142,22 @@ def main(numUsers, ratProsumers):
 
 	#print(BuyerFromP2P)
 	#print(BuyerFromSupp)
-	print(seller_ratio)
+	#print(seller_ratio)
 	#print(prosumer_seller_ToP2P)
-	#print(prosumer_seller_toGrid)
+	#print('prosumer_seller_toGrid',prosumer_seller_toGrid)
+	#print(prosumer_seller_toGrid_Addition)
 
 	#print(prosumer_consumer_from_Self);
 	#print(prosumer_consumer_from_Supp);
-	#print('battery charged')
-	#for i in range(numProsumers):
-	#	print(battery_charged[i])
+	
+		
+	
 
+	#print('battery_charged',battery_charged)
 if __name__ == '__main__':
 
+	
+	
 	main(40,25)
 	main(80,25)	
 	main(120,25)
@@ -161,6 +175,8 @@ if __name__ == '__main__':
 	main(120,75)
 	main(160,75)
 	main(200,75)
+
+	
 	
 	print("Finished!")
 	#main(100,50)
