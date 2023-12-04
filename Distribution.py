@@ -112,8 +112,8 @@ def main(numUsers, ratProsumers):
 	#print(consumer_ratio)
 	#print(prosumer_seller_ToP2P)
 	#print(prosumer_seller_toGrid)
-	print(prosumer_seller_consumption)
-	#print(prosumer_consumer_from_Self);
+	#print(prosumer_seller_consumption)
+	print(prosumer_consumer_from_Self);
 	#print(prosumer_consumer_from_Supp);
 
 
