@@ -17,6 +17,7 @@ Max_BATTERY = 20;
 
 def main(numUsers, ratProsumers):  
 
+	print("*****", numUsers, ratProsumers, "***")
 	percentageProsumers = ratProsumers;
 	percentageBuyers = 100 - ratProsumers;
 
@@ -49,10 +50,16 @@ def main(numUsers, ratProsumers):
 	df_buyer_con = pd.read_csv(File_Path_Buyer_Consumed,sep = ',',low_memory=False)
 	df_buyer_con = df_buyer_con.iloc[: , 2:]
 	
-	battInit = 0
-	
-	
+	battInit = 0	
 	battery_charged = [battInit for i in range(numProsumers)]
+
+	#battery_charged = Battery_INIT
+
+	#print('battery_chargedWWW', battery_charged)
+
+	#quit()
+
+
 	
 	for time in range(0, Total_TIME):
 	
@@ -157,7 +164,8 @@ def main(numUsers, ratProsumers):
 if __name__ == '__main__':
 
 	
-	
+	#Battery_INIT = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	#main(40,25,Battery_INIT)
 	main(40,25)
 	main(80,25)	
 	main(120,25)
@@ -176,6 +184,7 @@ if __name__ == '__main__':
 	main(160,75)
 	main(200,75)
 
+	
 	
 	
 	print("Finished!")
