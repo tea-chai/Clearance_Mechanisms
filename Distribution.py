@@ -11,7 +11,7 @@ import pandas as pd
 import random
 import sys
 
-Total_TIME = 744;
+Total_TIME = 8784;
 
 def main(numUsers, ratProsumers):  
 
@@ -30,12 +30,14 @@ def main(numUsers, ratProsumers):
 	Overall_Total_Supplies = 0;
 	prosumer_seller_ToP2P = 0 ;
 
+	prosumer_seller_consumption = 0;
+
 	prosumer_consumer_from_Self = 0;
 	prosumer_consumer_from_Supp = 0;
 
-	File_Path_Generated  = "./PV_Generated_4KWp_January.csv"
-	File_Path_Seller_Consumed= "./prosumer_January.csv"
-	File_Path_Buyer_Consumed= "./buyer_January.csv"
+	File_Path_Generated  = "./PV_Generated_4KWp.csv"
+	File_Path_Seller_Consumed= "./prosumer.csv"
+	File_Path_Buyer_Consumed= "./buyer.csv"
 	
 	df_gen = pd.read_csv(File_Path_Generated,sep = ',',low_memory=False)		
 	df_gen = df_gen.iloc[: , 2:]
@@ -73,6 +75,7 @@ def main(numUsers, ratProsumers):
 			if Prosumer_isSellerArr[i]: # Seller
 				
 				Supplies.append(energyDifference[i])
+				prosumer_seller_consumption += V_prosumer_con[i]
 
 			else: # consumer
 				
@@ -109,9 +112,9 @@ def main(numUsers, ratProsumers):
 	#print(consumer_ratio)
 	#print(prosumer_seller_ToP2P)
 	#print(prosumer_seller_toGrid)
-
+	print(prosumer_seller_consumption)
 	#print(prosumer_consumer_from_Self);
-	print(prosumer_consumer_from_Supp);
+	#print(prosumer_consumer_from_Supp);
 
 
 

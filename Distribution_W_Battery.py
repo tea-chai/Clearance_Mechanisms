@@ -34,6 +34,8 @@ def main(numUsers, ratProsumers):
 	Overall_Total_Supplies = 0;
 	prosumer_seller_ToP2P = 0 ;
 
+	prosumer_seller_consumption = 0;
+
 	prosumer_consumer_from_Self = 0;
 	prosumer_consumer_from_Supp = 0;
 
@@ -94,6 +96,7 @@ def main(numUsers, ratProsumers):
 			if Prosumer_isSellerArr[i]: # Seller
 				
 				Supplies.append(energyDifference[i])
+				prosumer_seller_consumption += V_prosumer_con[i] 
 
 			else: # consumer
 				Supplies.append(0)
@@ -154,10 +157,11 @@ def main(numUsers, ratProsumers):
 	#print('prosumer_seller_toGrid',prosumer_seller_toGrid)
 	#print(prosumer_seller_toGrid_Addition)
 
+	print(prosumer_seller_consumption)
 	#print(prosumer_consumer_from_Self);
 	#print(prosumer_consumer_from_Supp);
 	
-		
+
 	
 
 	#print('battery_charged',battery_charged)
