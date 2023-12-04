@@ -17,7 +17,7 @@ Max_BATTERY = 20;
 
 def main(numUsers, ratProsumers):  
 
-	print("*****", numUsers, ratProsumers, "***")
+	#print("*****", numUsers, ratProsumers, "***")
 	percentageProsumers = ratProsumers;
 	percentageBuyers = 100 - ratProsumers;
 
@@ -138,8 +138,8 @@ def main(numUsers, ratProsumers):
 				#print('here')
 				battery_charged[i]=0
 
-		if(time==7439):
-			print('battery_charged',battery_charged)
+		#if(time==7439):
+		#	print('battery_charged',battery_charged)
 			
 	 
 	BuyerFromSupp = BuyersTotalDemand  - BuyerFromP2P
