@@ -11,7 +11,7 @@ import pandas as pd
 import random
 import sys
 
-Total_TIME = 8784;
+Total_TIME = 8783;
 
 def main(numUsers, ratProsumers):  
 
@@ -111,11 +111,11 @@ def main(numUsers, ratProsumers):
 	#print(BuyerFromSupp)
 	#print(consumer_ratio)
 	
-	print(prosumer_seller_ToP2P)
+	#print(prosumer_seller_ToP2P)
 	#print(prosumer_seller_toGrid)
 	#print(prosumer_seller_consumption)
 	#print(prosumer_consumer_from_Self);
-	#print(prosumer_consumer_from_Supp);
+	print(prosumer_consumer_from_Supp);
 
 
 
