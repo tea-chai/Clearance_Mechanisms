@@ -148,14 +148,14 @@ def main(numUsers, ratProsumers, Battery_INIT):
 		
 
 	#print(BuyerFromP2P)
-	print(BuyerFromSupp)
+	#print(BuyerFromSupp)
 	#print(seller_ratio)
 	#print(prosumer_seller_ToP2P)	
 	#print(prosumer_seller_toGrid_Addition)
 	#print(prosumer_seller_consumption)
 	#print(prosumer_consumer_from_Self);
 	#print(prosumer_consumer_from_Supp);
-	#print(sum(battery_charged))
+	print(sum(battery_charged))
 	
 
 	#print('prosumer_seller_toGrid',prosumer_seller_toGrid)
