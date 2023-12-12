@@ -213,10 +213,6 @@ def main(numUsers, ratUsers):
 
 		BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
 		
-
-	
-	
-
 	 
 	BuyerFromSupp = BuyersTotalDemand  - BuyerFromP2P
 	consumer_ratio = (numProsumers_Total-isSeller_Total)/numProsumers_Total *100
@@ -240,8 +236,6 @@ def PFET(maxAmounts, numBuyers):
 	numSellers=len(maxAmounts);
 
 	print("numSellers",numSellers);
-	
-
 	
 	gammas = [1/numSellers for _ in range(numSellers)]
 	thetas = [Theta for _ in range(numBuyers)]
