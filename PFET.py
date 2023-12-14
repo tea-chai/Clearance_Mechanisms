@@ -131,7 +131,7 @@ def main(numUsers, ratProsumers):
 	#print(prosumer_seller_toGrid)
 	#print(prosumer_seller_consumption)
 	#print(prosumer_consumer_from_Self);
-	print(prosumer_consumer_from_Supp);
+	#print(prosumer_consumer_from_Supp);
 
 def PFET(Supplies_to_P2P, numBuyers):
 
