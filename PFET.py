@@ -11,10 +11,10 @@ import pandas as pd
 import random
 import sys
 
-Total_TIME = 5;
+Total_TIME = 24;
 
-FiT= 2 ;
-SupPrice = 20;
+FiT= 8 ;
+SupPrice = 40;
 
 eta_2 = 0.00001;
 Theta = 5;
@@ -112,11 +112,11 @@ def main(numUsers, ratProsumers):
 		BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
 
 		### PFET ###
-		print("## Time",time,'##')
-		print('Supplies_to_P2P',Supplies_to_P2P)
-		if(sum(Supplies_to_P2P)):
-			print('PFET')
-			Total_P2P_Profit = PFET(Supplies_to_P2P, numBuyers);
+		#print("## Time",time,'##')
+		#print('Supplies_to_P2P',Supplies_to_P2P)
+		#if(sum(Supplies_to_P2P)):
+		#	print('PFET')
+		#	Total_P2P_Profit = PFET(Supplies_to_P2P, numBuyers,isSeller_Total);
 		
 	BuyerFromSupp = BuyersTotalDemand  - BuyerFromP2P
 	consumer_ratio = (isSeller_Total)/numProsumers_Total *100
@@ -133,7 +133,10 @@ def main(numUsers, ratProsumers):
 	#print(prosumer_consumer_from_Self);
 	#print(prosumer_consumer_from_Supp);
 
-def PFET(Supplies_to_P2P, numBuyers):
+	
+	
+
+def PFET(Supplies_to_P2P, numBuyers,numSellers):
 
 	numSellers=len(Supplies_to_P2P);
 
@@ -146,8 +149,8 @@ def PFET(Supplies_to_P2P, numBuyers):
 	lambdas = [Lambda for _ in range(numBuyers)]
 	
 	numSellerIterations=0;
-	prices  =  [9, 6, 5, 14, 4, 9, 9, 18, 14, 12, 13, 19, 3, 15, 13, 17, 13, 4, 19, 13, 2, 4, 20, 10, 17, 5, 10, 11, 5, 8, 11, 10, 16, 16, 8, 6, 3, 16, 2, 14, 2, 11, 13, 3, 19, 9, 15, 7, 4, 2, 11, 20, 5, 16, 12, 17, 14, 12, 2, 6, 13, 6, 6, 6, 19, 11, 13, 19, 13, 10, 10, 13, 7, 11, 15, 9, 15, 4, 9, 19, 7, 18, 3, 11, 4, 15, 19, 7, 13, 7, 10, 5, 5, 13, 17, 12, 4, 9, 20, 17, 15, 15, 2, 6, 20, 20, 3, 12, 14, 13, 19, 7, 15, 14, 10, 17, 12, 2, 4, 12, 19, 8, 6, 15, 16, 18, 20, 7, 15, 4, 19, 20, 18, 3, 11, 7, 4, 4, 11, 9, 4, 10, 18, 19, 6, 20, 14, 5, 9, 20, 10, 5, 2, 15, 18, 15, 5, 19, 10, 10, 5, 7, 5, 17, 20, 18, 16, 5, 7, 14, 13, 12, 12, 7, 4, 14, 12, 19, 12, 7, 7, 4, 3, 11, 15, 4, 7, 15, 17, 17, 16, 2, 8, 5, 11, 4, 12, 18, 18, 20]
-	#prices = [100 for _ in range(numSellers)];
+	#prices  =  [9, 6, 5, 14, 4, 9, 9, 18, 14, 12, 13, 19, 3, 15, 13, 17, 13, 4, 19, 13, 2, 4, 20, 10, 17, 5, 10, 11, 5, 8, 11, 10, 16, 16, 8, 6, 3, 16, 2, 14, 2, 11, 13, 3, 19, 9, 15, 7, 4, 2, 11, 20, 5, 16, 12, 17, 14, 12, 2, 6, 13, 6, 6, 6, 19, 11, 13, 19, 13, 10, 10, 13, 7, 11, 15, 9, 15, 4, 9, 19, 7, 18, 3, 11, 4, 15, 19, 7, 13, 7, 10, 5, 5, 13, 17, 12, 4, 9, 20, 17, 15, 15, 2, 6, 20, 20, 3, 12, 14, 13, 19, 7, 15, 14, 10, 17, 12, 2, 4, 12, 19, 8, 6, 15, 16, 18, 20, 7, 15, 4, 19, 20, 18, 3, 11, 7, 4, 4, 11, 9, 4, 10, 18, 19, 6, 20, 14, 5, 9, 20, 10, 5, 2, 15, 18, 15, 5, 19, 10, 10, 5, 7, 5, 17, 20, 18, 16, 5, 7, 14, 13, 12, 12, 7, 4, 14, 12, 19, 12, 7, 7, 4, 3, 11, 15, 4, 7, 15, 17, 17, 16, 2, 8, 5, 11, 4, 12, 18, 18, 20]
+	prices = [random.randrange(FiT +1,SupPrice) for _ in range(numSellers)];
 	#Supplies_to_P2P = [12, 19, 20, 20, 20, 11, 20, 20, 16, 20, 12, 19, 20, 20, 20, 1, 20, 20, 11, 20, 12, 19, 20, 20, 20, 1, 20, 20, 11, 20, 12, 19, 20, 20, 20, 1, 20, 20, 11, 20, 12, 19, 20, 20, 20, 1, 20, 20, 11, 20]
 	#print("prices",prices[0:10]);
 	#print("Supplies_to_P2P",Supplies_to_P2P[0:20]);

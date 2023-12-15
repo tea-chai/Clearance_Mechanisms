@@ -11,7 +11,9 @@ import pandas as pd
 import random
 import sys
 
+SupPrice = 40
 Total_TIME = 8784;
+
 
 def main(numUsers, ratProsumers):  
 
@@ -115,7 +117,8 @@ def main(numUsers, ratProsumers):
 	#print(prosumer_seller_toGrid)
 	#print(prosumer_seller_consumption)
 	#print(prosumer_consumer_from_Self);
-	print(prosumer_consumer_from_Supp);
+	#print(prosumer_consumer_from_Supp);
+	print(BuyersTotalDemand*SupPrice/100)
 
 
 
