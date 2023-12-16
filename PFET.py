@@ -13,6 +13,8 @@ import sys
 
 Total_TIME = 24;
 
+numToPlot = 10;
+
 FiT= 8 ;
 SupPrice = 40;
 
@@ -22,6 +24,9 @@ Lambda=20.1;
 Nu2=0.15
 
 numToPlot = 0;
+
+DATES = "_21_April";
+
 
 def main(numUsers, ratProsumers):  
 
@@ -40,14 +45,15 @@ def main(numUsers, ratProsumers):
 	Overall_Total_Supplies = 0;
 	prosumer_seller_ToP2P = 0 ;
 
+	Overall_Total_P2P_Profit = 0;
 	prosumer_seller_consumption = 0;
 
 	prosumer_consumer_from_Self = 0;
 	prosumer_consumer_from_Supp = 0;
 
-	File_Path_Generated  = "./PV_Generated_4KWp_21_April.csv"
-	File_Path_Seller_Consumed= "./prosumer_21_April.csv"
-	File_Path_Buyer_Consumed= "./buyer_21_April.csv"
+	File_Path_Generated  = "./PV_Generated_4KWp"+DATES+".csv"
+	File_Path_Seller_Consumed= "./prosumer"+DATES+".csv"
+	File_Path_Buyer_Consumed= "./buyer"+DATES+".csv"
 	
 	df_gen = pd.read_csv(File_Path_Generated,sep = ',',low_memory=False)		
 	df_gen = df_gen.iloc[: , 2:]
@@ -61,7 +67,7 @@ def main(numUsers, ratProsumers):
 	
 	for time in range(0, Total_TIME):
 
-
+		#clearPlots()
 		V_gen = df_gen.iloc[time].to_numpy()[0:numProsumers]
 		V_prosumer_con = df_prosumer_con.iloc[time].to_numpy()[0:numProsumers]
 		V_buyer_con = df_buyer_con.iloc[time].to_numpy()[0:numBuyers]
@@ -114,9 +120,10 @@ def main(numUsers, ratProsumers):
 		### PFET ###
 		#print("## Time",time,'##')
 		#print('Supplies_to_P2P',Supplies_to_P2P)
-		#if(sum(Supplies_to_P2P)):
-		#	print('PFET')
-		#	Total_P2P_Profit = PFET(Supplies_to_P2P, numBuyers,isSeller_Total);
+		if(sum(Supplies_to_P2P)):
+			#print('PFET')
+			Total_P2P_Profit = PFET(Supplies_to_P2P, numBuyers,isSeller_Total);
+			Overall_Total_P2P_Profit +=Total_P2P_Profit;
 		
 	BuyerFromSupp = BuyersTotalDemand  - BuyerFromP2P
 	consumer_ratio = (isSeller_Total)/numProsumers_Total *100
@@ -133,14 +140,15 @@ def main(numUsers, ratProsumers):
 	#print(prosumer_consumer_from_Self);
 	#print(prosumer_consumer_from_Supp);
 
-	
+	print((prosumer_seller_toGrid * FiT + Overall_Total_P2P_Profit - prosumer_consumer_from_Supp *SupPrice ) /100 )
+	#print((BuyerFromSupp * SupPrice + Overall_Total_P2P_Profit )/100)
 	
 
 def PFET(Supplies_to_P2P, numBuyers,numSellers):
 
 	numSellers=len(Supplies_to_P2P);
 
-	print("numSellers",numSellers);
+	#print("numSellers",numSellers);
 	
 
 	
@@ -156,7 +164,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 	#print("Supplies_to_P2P",Supplies_to_P2P[0:20]);
 	iteration =0 ;
 	while(True):
-		print(f"----------ITERATION {iteration} ---------- ")
+		#print(f"----------ITERATION {iteration} ---------- ")
 		iteration +=1;
 		appendPrices(prices);
 		
@@ -187,13 +195,14 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 			for seller in range(0,numSellers):	
 				Total_P2P_Profit += Supplies_to_P2P[seller]* prices[seller];
 			
+			plotPrices();	
 			
 			return Total_P2P_Profit;
 					
 			
 			#plotDemand();
 			#plotStates();
-			#plotPrices();				
+						
 	
 
 def buyers_algorithm(prices, thetas, lambdas, gammas):
@@ -275,8 +284,8 @@ def plotPrices():
 
 if __name__ == '__main__':
 
-	main(40,50)
-	'''
+	
+	
 	main(40,25)
 	main(80,25)	
 	main(120,25)
@@ -294,7 +303,7 @@ if __name__ == '__main__':
 	main(120,75)
 	main(160,75)
 	main(200,75)
-	'''
+	
 
 	print("Finished!")
 	#main(100,50)
