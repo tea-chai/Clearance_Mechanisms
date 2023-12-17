@@ -11,25 +11,21 @@ import pandas as pd
 import random
 import sys
 
-numToPlot =10;
+numToPlot = 10;
 
 price0=[]; price1=[];price2=[];price3=[];price4=[];price5=[];price6=[];price7=[];price8=[];price9=[];
 
-
 Total_TIME = 24;
-
 
 FiT= 8 ;
 SupPrice = 40;
 
-eta_1=0.15
+eta_1 = 0.15
 eta_2 = 0.00001;
 Theta = 5;
-Lambda=20.1;
-
+Lambda= 20.1;
 
 DATES = "_21_April";
-
 
 def main(numUsers, ratProsumers):  
 
@@ -39,20 +35,20 @@ def main(numUsers, ratProsumers):
 	numProsumers = int(numUsers * percentageProsumers / 100);
 	numBuyers = int (numUsers * percentageBuyers / 100);
 	
-	BuyersTotalDemand = 0;
-	BuyerFromP2P = 0;
+	Overall_Buyers_Demand = 0;
+	Overall_BuyerFromP2P = 0;
  
-	isSeller_Total = 0;
-	numProsumers_Total = 0;
+	Overall_numSellers = 0;
+	Overall_numProsumers = 0;
 
+	Overall_pro_seller_consumption = 0;
 	Overall_Total_Supplies = 0;
-	prosumer_seller_ToP2P = 0 ;
+	Overall_pro_seller_ToP2P = 0 ;
+	
+	Overall_pro_consumer_from_Self = 0;
+	Overall_pro_consumer_from_Supp = 0;
 
 	Overall_Total_P2P_Profit = 0;
-	prosumer_seller_consumption = 0;
-
-	prosumer_consumer_from_Self = 0;
-	prosumer_consumer_from_Supp = 0;
 
 	File_Path_Generated  = "./PV_Generated_4KWp"+DATES+".csv"
 	File_Path_Seller_Consumed= "./prosumer"+DATES+".csv"
@@ -74,12 +70,7 @@ def main(numUsers, ratProsumers):
 		V_gen = df_gen.iloc[time].to_numpy()[0:numProsumers]
 		V_prosumer_con = df_prosumer_con.iloc[time].to_numpy()[0:numProsumers]
 		V_buyer_con = df_buyer_con.iloc[time].to_numpy()[0:numBuyers]
-		
-		'''		
-		print(V_prosumer_con[0:15])
-		print(V_buyer_con[0:10])
-		print(V_gen[0:10])		
-		'''
+	
 		
 		energyDifference = [V_gen[i] - V_prosumer_con[i] for i in range(numProsumers)]
 
@@ -87,8 +78,8 @@ def main(numUsers, ratProsumers):
 
 		print("Prosumer_isSellerArr",Prosumer_isSellerArr)
 		numSellers = sum(Prosumer_isSellerArr);
-		isSeller_Total +=numSellers;		
-		numProsumers_Total += numProsumers;
+		Overall_numSellers +=numSellers;		
+		Overall_numProsumers += numProsumers;
 	
 		Supplies= []
 
@@ -96,19 +87,18 @@ def main(numUsers, ratProsumers):
 			if Prosumer_isSellerArr[i]: # Seller
 				
 				Supplies.append(energyDifference[i])
-				prosumer_seller_consumption += V_prosumer_con[i]
+				Overall_pro_seller_consumption += V_prosumer_con[i]
 
 			else: # consumer
 				
-				prosumer_consumer_from_Self += V_gen[i] 
-				prosumer_consumer_from_Supp += V_prosumer_con[i] - V_gen[i] 
-	
+				Overall_pro_consumer_from_Self += V_gen[i] 
+				Overall_pro_consumer_from_Supp += V_prosumer_con[i] - V_gen[i] 
 	
 		TotalSupply = sum(Supplies);
 		Overall_Total_Supplies += TotalSupply;
 
 		TotalDemand = sum(V_buyer_con);
-		BuyersTotalDemand += TotalDemand
+		Overall_Buyers_Demand += TotalDemand
 
 		if(TotalSupply>TotalDemand):
 			Supplies_to_P2P = [TotalDemand * amount/ TotalSupply for amount in Supplies]	
@@ -118,9 +108,9 @@ def main(numUsers, ratProsumers):
 		
 
 		if((Supplies_to_P2P)):
-			prosumer_seller_ToP2P += sum(Supplies_to_P2P)		
+			Overall_pro_seller_ToP2P += sum(Supplies_to_P2P)		
 
-		BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
+		Overall_BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
 
 		### PFET ###
 		#print("## Time",time,'##')
@@ -130,22 +120,22 @@ def main(numUsers, ratProsumers):
 			Total_P2P_Profit = PFET(Supplies_to_P2P, numBuyers,numSellers);
 			Overall_Total_P2P_Profit +=Total_P2P_Profit;
 		
-	BuyerFromSupp = BuyersTotalDemand  - BuyerFromP2P
-	consumer_ratio = (isSeller_Total)/numProsumers_Total *100
-	prosumer_seller_toGrid = Overall_Total_Supplies - prosumer_seller_ToP2P
+	BuyerFromSupp = Overall_Buyers_Demand  - Overall_BuyerFromP2P
+	consumer_ratio = (Overall_numSellers)/Overall_numProsumers *100
+	prosumer_seller_toGrid = Overall_Total_Supplies - Overall_pro_seller_ToP2P
 		
 
-	#print(BuyerFromP2P)
+	#print(Overall_BuyerFromP2P)
 	#print(BuyerFromSupp)
 	#print(consumer_ratio)
 	
-	#print(prosumer_seller_ToP2P)
+	#print(Overall_pro_seller_ToP2P)
 	#print(prosumer_seller_toGrid)
-	#print(prosumer_seller_consumption)
-	#print(prosumer_consumer_from_Self);
-	#print(prosumer_consumer_from_Supp);
+	#print(Overall_pro_seller_consumption)
+	#print(Overall_pro_consumer_from_Self);
+	#print(Overall_pro_consumer_from_Supp);
 
-	#print((prosumer_seller_toGrid * FiT + Overall_Total_P2P_Profit - prosumer_consumer_from_Supp *SupPrice ) /100 )
+	#print((prosumer_seller_toGrid * FiT + Overall_Total_P2P_Profit - Overall_pro_consumer_from_Supp *SupPrice ) /100 )
 	#print((BuyerFromSupp * SupPrice + Overall_Total_P2P_Profit )/100)
 	
 
