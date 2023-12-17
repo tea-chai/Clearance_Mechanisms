@@ -14,9 +14,9 @@ import sys
 FiT= 8 ;
 SupPrice = 40
 
-Total_TIME = 744;
+Total_TIME = 24;
 
-DATES = "_January";
+DATES = "_21_April";
 
 def main(numUsers, ratProsumers):  
 
@@ -122,8 +122,8 @@ def main(numUsers, ratProsumers):
 	#print(prosumer_consumer_from_Self);
 	#print(prosumer_consumer_from_Supp);
 
-	#print((Overall_Total_Supplies * FiT - prosumer_consumer_from_Supp *SupPrice ) /100 )
-	print(BuyersTotalDemand*SupPrice/100)
+	print((Overall_Total_Supplies * FiT - prosumer_consumer_from_Supp *SupPrice ) /100 )
+	#print(BuyersTotalDemand*SupPrice/100)
 	
 
 

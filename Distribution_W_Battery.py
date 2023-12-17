@@ -136,13 +136,10 @@ def main(numUsers, ratProsumers):
 					
 					battery_charged[i] = potential_charge;
 				else:
-					#print('ALERT!')
-					#quit('ALERT')
 					battery_charged[i]= Max_BATTERY;
 					prosumer_seller_toGrid_Addition += potential_charge - Max_BATTERY;
 					
 			else: # consumer
-				#print('here')
 				battery_charged[i]=0
 
 		#if(time==Total_TIME):
