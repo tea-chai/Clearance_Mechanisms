@@ -114,9 +114,9 @@ def main(numUsers, ratProsumers):
 
 		### PFET ###
 		#print("## Time",time,'##')
-		#print('Supplies_to_P2P',Supplies_to_P2P)
+		
 		if(sum(Supplies_to_P2P)):
-			#print('PFET')
+			
 			Total_P2P_Profit = PFET(Supplies_to_P2P, numBuyers,numSellers);
 			Overall_Total_P2P_Profit +=Total_P2P_Profit;
 		
@@ -186,12 +186,13 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 			
 			#plotPrices();
 			#plotDemand();	
+			#plotStates()
 			clearPlots();
 			return Total_P2P_Profit;
 					
 			
-			#
-			#plotStates();
+			
+			
 						
 	
 
