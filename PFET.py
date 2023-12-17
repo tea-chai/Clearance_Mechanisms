@@ -76,7 +76,7 @@ def main(numUsers, ratProsumers):
 
 		Prosumer_isSellerArr = [diff > 0 for diff in energyDifference]	
 
-		print("Prosumer_isSellerArr",Prosumer_isSellerArr)
+		#print("Prosumer_isSellerArr",Prosumer_isSellerArr)
 		numSellers = sum(Prosumer_isSellerArr);
 		Overall_numSellers +=numSellers;		
 		Overall_numProsumers += numProsumers;
@@ -100,32 +100,30 @@ def main(numUsers, ratProsumers):
 		TotalDemand = sum(V_buyer_con);
 		Overall_Buyers_Demand += TotalDemand
 
+		Overall_BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
+
 		if(TotalSupply>TotalDemand):
 			Supplies_to_P2P = [TotalDemand * amount/ TotalSupply for amount in Supplies]	
 		else:
 			Supplies_to_P2P = Supplies;
 
-		
-
-		if((Supplies_to_P2P)):
-			Overall_pro_seller_ToP2P += sum(Supplies_to_P2P)		
-
-		Overall_BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
-
+			
 		### PFET ###
 		#print("## Time",time,'##')
 		
 		if(sum(Supplies_to_P2P)):
+
+			Overall_pro_seller_ToP2P += sum(Supplies_to_P2P)
+
+			#Overall_Total_P2P_Profit +=  PFET(Supplies_to_P2P, numBuyers,numSellers);
 			
-			Total_P2P_Profit = PFET(Supplies_to_P2P, numBuyers,numSellers);
-			Overall_Total_P2P_Profit +=Total_P2P_Profit;
 		
 	BuyerFromSupp = Overall_Buyers_Demand  - Overall_BuyerFromP2P
 	consumer_ratio = (Overall_numSellers)/Overall_numProsumers *100
 	prosumer_seller_toGrid = Overall_Total_Supplies - Overall_pro_seller_ToP2P
 		
 
-	#print(Overall_BuyerFromP2P)
+	print(Overall_BuyerFromP2P)
 	#print(BuyerFromSupp)
 	#print(consumer_ratio)
 	
@@ -275,8 +273,8 @@ def plotPrices():
 
 if __name__ == '__main__':
 
-	main(20,50)
-	'''	
+	#main(20,50)
+		
 	main(40,25)
 	main(80,25)	
 	main(120,25)
@@ -294,7 +292,7 @@ if __name__ == '__main__':
 	main(120,75)
 	main(160,75)
 	main(200,75)
-	'''	
+		
 
 	print("Finished!")
 	#main(100,50)
