@@ -20,13 +20,13 @@ for i in range(numToPlot):
 for i in range(numToPlot):
 	globals()[f'state{i}'] = []	
 
-Total_TIME = 8;
+Total_TIME = 24;
 
 FiT= 8 ;
 SupPrice = 40;
 
-eta_1 = 1.5
-eta_2 = 0.0001;
+eta_1 = 2
+eta_2 = 0.001;
 Theta = 80;
 Lambda= 40.1;
 
@@ -164,7 +164,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 	
 	ITERATION =0 ;
 	while(True):
-		print(f"ITERATION {ITERATION} ---------- ")
+		#print(f"ITERATION {ITERATION} ---------- ")
 		ITERATION +=1;
 		
 		
@@ -173,7 +173,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 		appendPrices(prices);
 		
 		sellerDemands , states = buyers_algorithm(prices, thetas, lambdas, gammas);
-		print(sellerDemands)
+		#print(sellerDemands)
 		appendDemands(sellerDemands);
 		appendStates(states)
 		for seller in range(0,numSellers):	
@@ -184,7 +184,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 		
 		exit=1;
 		for seller in range(0,numSellers):
-			if(abs((sellerDemands[seller]-Supplies_to_P2P[seller]))>0.01):
+			if(abs((sellerDemands[seller]-Supplies_to_P2P[seller]))>0.1):
 				exit=0;
 				break;
 			
