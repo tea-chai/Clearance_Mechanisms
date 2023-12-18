@@ -202,11 +202,6 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 			clearPlots();
 			return Total_P2P_Profit;
 					
-			
-			
-			
-						
-	
 
 def buyers_algorithm(prices, thetas, lambdas, gammas):
     
