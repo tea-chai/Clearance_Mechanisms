@@ -25,8 +25,10 @@ Lambda=20.1
 
 Theta=0.5 
 
+
 FiT= 2 ;
 SupPrice = 20;
+
 
 Nu2= 0.15 #0.15
 
@@ -161,8 +163,13 @@ def main():
 
 			Wtot = sum(sellerWelfares);
 
+			
+
 			print("Wtot",Wtot);	
-								
+			
+		
+					
+			
 			sellerDemands = [];
 
 			
@@ -179,7 +186,10 @@ def main():
 			
 			appendDemands(sellerDemands);	
 			numSellerIterations+=1;
-	
+
+			
+
+			
 		
 			exit=1;
 			for seller in range(0,numSellers):
@@ -201,7 +211,6 @@ def main():
 				break;
 
 
-
 def evolutionaryGame(prices):		
 
 	welfares=[];
@@ -209,7 +218,6 @@ def evolutionaryGame(prices):
 	for seller in range(0,numSellers):
 		
 		amountEnergy = [];
-
 	
 		for buyer in range(0,numBuyers):
 						
@@ -220,11 +228,9 @@ def evolutionaryGame(prices):
 		Wbj=0;			
 
 		for buyer in range(0,numBuyers):
-			Wbj+=  Theta * ((amountEnergy[buyer]**2));
-	
+			Wbj+=  Theta * ((amountEnergy[buyer]**2));	
 
-		welfares.append(Wbj/2);
-	
+		welfares.append(Wbj/2);	
 
 	return welfares;
 
