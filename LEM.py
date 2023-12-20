@@ -25,9 +25,9 @@ Total_TIME = 24;
 FiT= 8 ;
 SupPrice = 40;
 
-eta_1 = 2
-eta_2 = 0.001;
-Theta = 80;
+eta_1 = 4
+#eta_2 = 0.15;
+Theta = 50;
 Lambda= 40.1;
 
 DATES = "_21_April";
@@ -71,12 +71,13 @@ def main(numUsers, ratProsumers):
 	
 	for time in range(0, Total_TIME):
 
-		print(f"time {time} ---------- ")
+		print(f"K time {time} ---------- ")
+		
 		V_gen = df_gen.iloc[time].to_numpy()[0:numProsumers]
 		V_prosumer_con = df_prosumer_con.iloc[time].to_numpy()[0:numProsumers]
 		V_buyer_con = df_buyer_con.iloc[time].to_numpy()[0:numBuyers]
 	
-		
+	
 		energyDifference = [V_gen[i] - V_prosumer_con[i] for i in range(numProsumers)]
 
 		Prosumer_isSellerArr = [diff > 0 for diff in energyDifference]	
@@ -115,12 +116,16 @@ def main(numUsers, ratProsumers):
 			
 		### PFET ###
 		#print("## Time",time,'##')
-		
+		#Supplies_to_P2P = [12,19,20,20,20,11,20,20,16,20, 12,19,20,20,20,11,20,20,16,20,20, 1, 20, 20, 11, 20, 12, 19, 20, 20, 20, 1, 20, 20, 11, 20, 12, 19, 20, 20, 20, 1, 20, 20, 11, 20, 12, 19, 20, 20, 20, 1, 20, 20, 11, 20]
+		#Supplies_to_P2P=[]
+		#for seller in range(0,numSellers):	
+		#	Supplies_to_P2P.append(((seller)%10)+10);
+
 		if(sum(Supplies_to_P2P)):
 
 			Overall_pro_seller_ToP2P += sum(Supplies_to_P2P)
 
-			Overall_Total_P2P_Profit +=  PFET(Supplies_to_P2P, numBuyers,numSellers);
+			Overall_Total_P2P_Profit +=  PFET(Supplies_to_P2P,TotalDemand, numBuyers,numSellers,time);
 			
 		
 	BuyerFromSupp = Overall_Buyers_Demand  - Overall_BuyerFromP2P
@@ -146,20 +151,24 @@ def main(numUsers, ratProsumers):
 	#print((BuyerFromSupp * SupPrice + Overall_Total_P2P_Profit )/100)
 	
 
-def PFET(Supplies_to_P2P, numBuyers,numSellers):
+def PFET(Supplies_to_P2P,TotalDemand, numBuyers,numSellers,time):
 
-	print('Supplies_to_P2P',Supplies_to_P2P)
+	#print('Supplies_to_P2P',Supplies_to_P2P)
+	print('Sum_Supplies_to_P2P',sum(Supplies_to_P2P))
 	global numToPlot;
 	numToPlot = min(10,numSellers) ;
 
 	gammas = [1/numSellers for _ in range(numSellers)]
 	thetas = [Theta for _ in range(numBuyers)]
+	#thetas = [random.randrange(1,100) for _ in range(numBuyers)]
 	lambdas = [Lambda for _ in range(numBuyers)]
 	
 	
 	prices = [random.randrange(FiT +1,SupPrice) for _ in range(numSellers)];
-
+	#prices = [10 for _ in range(numSellers)];
+	
 	#prices  =  [9, 6, 5, 14, 4, 9, 9, 18, 14, 12, 13, 19, 3, 15, 13, 17, 13, 4, 19, 13, 2, 4, 20, 10, 17, 5, 10, 11, 5, 8, 11, 10, 16, 16, 8, 6, 3, 16, 2, 14, 2, 11, 13, 3, 19, 9, 15, 7, 4, 2, 11, 20, 5, 16, 12, 17, 14, 12, 2, 6, 13, 6, 6, 6, 19, 11, 13, 19, 13, 10, 10, 13, 7, 11, 15, 9, 15, 4, 9, 19, 7, 18, 3, 11, 4, 15, 19, 7, 13, 7, 10, 5, 5, 13, 17, 12, 4, 9, 20, 17, 15, 15, 2, 6, 20, 20, 3, 12, 14, 13, 19, 7, 15, 14, 10, 17, 12, 2, 4, 12, 19, 8, 6, 15, 16, 18, 20, 7, 15, 4, 19, 20, 18, 3, 11, 7, 4, 4, 11, 9, 4, 10, 18, 19, 6, 20, 14, 5, 9, 20, 10, 5, 2, 15, 18, 15, 5, 19, 10, 10, 5, 7, 5, 17, 20, 18, 16, 5, 7, 14, 13, 12, 12, 7, 4, 14, 12, 19, 12, 7, 7, 4, 3, 11, 15, 4, 7, 15, 17, 17, 16, 2, 8, 5, 11, 4, 12, 18, 18, 20]
+	P2P_TOT = sum(Supplies_to_P2P);
 	
 	
 	ITERATION =0 ;
@@ -167,24 +176,31 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 		#print(f"ITERATION {ITERATION} ---------- ")
 		ITERATION +=1;
 		
-		
+		if(ITERATION>500):
+			print("prices",prices[0:numSellers])
+			print('demands',Demands)
+			print('Supplies_to_P2P',Supplies_to_P2P)
+			plotPrices();
+			plotDemand();
+			quit("ITER");
 
 		#print("prices",prices[0:10])
 		appendPrices(prices);
 		
-		sellerDemands , states = buyers_algorithm(prices, thetas, lambdas, gammas);
+		W_B_J , W_TOT = buyers_algorithm(prices, thetas, lambdas, gammas);
 		#print(sellerDemands)
-		appendDemands(sellerDemands);
-		appendStates(states)
+		Demands = [P2P_TOT*W_B_J[s_j]/W_TOT for s_j in range(0,numSellers)]
+		
+		appendDemands(Demands);
 		for seller in range(0,numSellers):	
-			tempPrice = prices[seller]+eta_1*(sellerDemands[seller]-Supplies_to_P2P[seller]);
+			tempPrice = prices[seller]+eta_1*(Demands[seller]-Supplies_to_P2P[seller]);
 			prices[seller] = min(SupPrice,max(FiT,tempPrice));	
 
 	
 		
 		exit=1;
 		for seller in range(0,numSellers):
-			if(abs((sellerDemands[seller]-Supplies_to_P2P[seller]))>0.1):
+			if(abs((Demands[seller]-Supplies_to_P2P[seller]))>0.01):
 				exit=0;
 				break;
 			
@@ -196,19 +212,23 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 			for seller in range(0,numSellers):	
 				Total_P2P_Profit += Supplies_to_P2P[seller]* prices[seller];
 			
-			plotPrices();
-			plotDemand();	
-			plotStates();
+			if(time==12):
+				plotPrices();
+				plotDemand();	
+			#plotStates();
 			clearPlots();
 			return Total_P2P_Profit;
 					
 
 def buyers_algorithm(prices, thetas, lambdas, gammas):
     
+	
     N_S = len(prices)
     b_i = len(lambdas)
     s_j = len(gammas)
-    
+   
+    welfares = []
+
     X = [[0] * b_i for _ in range(s_j)]
     W_B_J = [0] * s_j
     W_bar = 0
@@ -222,13 +242,10 @@ def buyers_algorithm(prices, thetas, lambdas, gammas):
 	    	           
         W_B_J[j] = 0.5 * sum(thetas[i] * X[j][i]**2 for i in range(b_i))
     
-    W_bar = sum(gammas[j] * W_B_J[j] for j in range(s_j))
+    W_TOT = sum(W_B_J)
     
-    for j in range(s_j):
-        D_t[j] = gammas[j] * sum(X[j][i] for i in range(b_i))
-        gamma_t[j] = gammas[j] + eta_2 * gammas[j] * (W_B_J[j] - W_bar)
-    print('states',gamma_t)
-    return D_t, gamma_t
+    
+    return W_B_J, W_TOT
 
 
 
@@ -283,8 +300,8 @@ def plotPrices():
 if __name__ == '__main__':
 
 	main(40,50)
-	'''
-		
+	
+	'''	
 	main(40,25)
 	main(80,25)	
 	main(120,25)
@@ -304,7 +321,7 @@ if __name__ == '__main__':
 	main(200,75)
 	'''	
 
-	print("Finished!")
+	print("Finished MMM!")
 	#main(100,50)
 
 

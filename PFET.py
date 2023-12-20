@@ -25,9 +25,9 @@ Total_TIME = 24;
 FiT= 8 ;
 SupPrice = 40;
 
-eta_1 = 2
+eta_1 = 4
 eta_2 = 0.001;
-Theta = 80;
+Theta = 50;
 Lambda= 40.1;
 
 DATES = "_21_April";
@@ -119,8 +119,8 @@ def main(numUsers, ratProsumers):
 		if(sum(Supplies_to_P2P)):
 
 			Overall_pro_seller_ToP2P += sum(Supplies_to_P2P)
-
-			Overall_Total_P2P_Profit +=  PFET(Supplies_to_P2P, numBuyers,numSellers);
+			if(numSellers>1):
+				Overall_Total_P2P_Profit +=  PFET(Supplies_to_P2P, numBuyers,numSellers);
 			
 		
 	BuyerFromSupp = Overall_Buyers_Demand  - Overall_BuyerFromP2P
@@ -152,7 +152,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 	global numToPlot;
 	numToPlot = min(10,numSellers) ;
 
-	gammas = [1/numSellers for _ in range(numSellers)]
+	states = [1/numSellers for _ in range(numSellers)]
 	thetas = [Theta for _ in range(numBuyers)]
 	lambdas = [Lambda for _ in range(numBuyers)]
 	
@@ -167,12 +167,16 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 		#print(f"ITERATION {ITERATION} ---------- ")
 		ITERATION +=1;
 		
-		
+		if(ITERATION>500):
+			quit('ALERT ITER');
 
 		#print("prices",prices[0:10])
 		appendPrices(prices);
-		
-		sellerDemands , states = buyers_algorithm(prices, thetas, lambdas, gammas);
+		print('states',states)
+		for ilm in range(0,1):
+			if(states[ilm]<0):
+				quit('ALERT NEG');
+		sellerDemands , states = buyers_algorithm(prices, thetas, lambdas, states);
 		#print(sellerDemands)
 		appendDemands(sellerDemands);
 		appendStates(states)
@@ -184,7 +188,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 		
 		exit=1;
 		for seller in range(0,numSellers):
-			if(abs((sellerDemands[seller]-Supplies_to_P2P[seller]))>0.1):
+			if(abs((sellerDemands[seller]-Supplies_to_P2P[seller]))>0.01):
 				exit=0;
 				break;
 			
@@ -197,37 +201,36 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 				Total_P2P_Profit += Supplies_to_P2P[seller]* prices[seller];
 			
 			plotPrices();
-			plotDemand();	
-			plotStates();
+			#plotDemand();	
+			#plotStates();
 			clearPlots();
 			return Total_P2P_Profit;
 					
 
 def buyers_algorithm(prices, thetas, lambdas, gammas):
     
-    N_S = len(prices)
+    
     b_i = len(lambdas)
     s_j = len(gammas)
     
     X = [[0] * b_i for _ in range(s_j)]
     W_B_J = [0] * s_j
-    W_bar = 0
     D_t = [0] * s_j
     gamma_t = [0] * s_j
     
     
     for j in range(s_j):
         for i in range(b_i):
-            X[j][i] = (lambdas[i] - prices[j]) / thetas[i]; 
-	    	           
+            X[j][i] = (lambdas[i] - prices[j]) / thetas[i]; #print('X[j][i]',X[j][i]) 
+	    	          
         W_B_J[j] = 0.5 * sum(thetas[i] * X[j][i]**2 for i in range(b_i))
     
     W_bar = sum(gammas[j] * W_B_J[j] for j in range(s_j))
     
     for j in range(s_j):
         D_t[j] = gammas[j] * sum(X[j][i] for i in range(b_i))
-        gamma_t[j] = gammas[j] + eta_2 * gammas[j] * (W_B_J[j] - W_bar)
-    print('states',gamma_t)
+        gamma_t[j] = gammas[j] + eta_2 * gammas[j] * (W_B_J[j] - W_bar);
+    
     return D_t, gamma_t
 
 
@@ -304,7 +307,7 @@ if __name__ == '__main__':
 	main(200,75)
 	'''	
 
-	print("Finished!")
+	print("Finished! MMM")
 	#main(100,50)
 
 
