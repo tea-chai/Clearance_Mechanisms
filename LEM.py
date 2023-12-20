@@ -27,7 +27,7 @@ SupPrice = 40;
 
 eta_1 = 4
 #eta_2 = 0.15;
-Theta = 50;
+Theta = 20;
 Lambda= 40.1;
 
 DATES = "_21_April";
@@ -182,7 +182,7 @@ def PFET(Supplies_to_P2P,TotalDemand, numBuyers,numSellers,time):
 			print('Supplies_to_P2P',Supplies_to_P2P)
 			plotPrices();
 			plotDemand();
-			quit("ITER");
+			quit("ALERT ITER");
 
 		#print("prices",prices[0:10])
 		appendPrices(prices);

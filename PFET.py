@@ -27,7 +27,7 @@ SupPrice = 40;
 
 eta_1 = 4
 eta_2 = 0.001;
-Theta = 50;
+Theta = 20;
 Lambda= 40.1;
 
 DATES = "_21_April";
@@ -120,7 +120,7 @@ def main(numUsers, ratProsumers):
 
 			Overall_pro_seller_ToP2P += sum(Supplies_to_P2P)
 			if(numSellers>1):
-				Overall_Total_P2P_Profit +=  PFET(Supplies_to_P2P, numBuyers,numSellers);
+				Overall_Total_P2P_Profit +=  PFET(Supplies_to_P2P, numBuyers,numSellers,time);
 			
 		
 	BuyerFromSupp = Overall_Buyers_Demand  - Overall_BuyerFromP2P
@@ -146,7 +146,7 @@ def main(numUsers, ratProsumers):
 	#print((BuyerFromSupp * SupPrice + Overall_Total_P2P_Profit )/100)
 	
 
-def PFET(Supplies_to_P2P, numBuyers,numSellers):
+def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 
 	print('Supplies_to_P2P',Supplies_to_P2P)
 	global numToPlot;
@@ -168,11 +168,17 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 		ITERATION +=1;
 		
 		if(ITERATION>500):
+			print("prices",prices[0:numSellers])
+			
+			print('Supplies_to_P2P',Supplies_to_P2P)
+			print('sellerDemands',sellerDemands)
+			plotPrices();
+			plotDemand();
 			quit('ALERT ITER');
 
 		#print("prices",prices[0:10])
 		appendPrices(prices);
-		print('states',states)
+		#print('states',states)
 		for ilm in range(0,1):
 			if(states[ilm]<0):
 				quit('ALERT NEG');
@@ -200,9 +206,9 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers):
 			for seller in range(0,numSellers):	
 				Total_P2P_Profit += Supplies_to_P2P[seller]* prices[seller];
 			
-			plotPrices();
-			#plotDemand();	
-			#plotStates();
+			if(time==12):
+				plotPrices();
+				plotDemand();
 			clearPlots();
 			return Total_P2P_Profit;
 					
