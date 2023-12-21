@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 import random
-import sys
+import sys	
 
 numToPlot = 10;
 
@@ -20,40 +20,46 @@ for i in range(numToPlot):
 for i in range(numToPlot):
 	globals()[f'state{i}'] = []	
 
-Total_TIME = 24;
+Total_TIME = 8784;
 
 FiT= 8 ;
 SupPrice = 40;
 
 eta_1 = 4
-#eta_2 = 0.15;
+eta_2 = 0.001;
 Theta = 20;
 Lambda= 40.1;
 
-DATES = "_21_April";
+DATES = "";
 
+Max_BATTERY = 20;
+
+#def main(numUsers, ratProsumers, Battery_INIT):  
 def main(numUsers, ratProsumers):  
 
+
+	#print("*****", numUsers, ratProsumers, "***")
 	percentageProsumers = ratProsumers;
 	percentageBuyers = 100 - ratProsumers;
 
 	numProsumers = int(numUsers * percentageProsumers / 100);
 	numBuyers = int (numUsers * percentageBuyers / 100);
 	
-	Overall_Buyers_Demand = 0;
-	Overall_BuyerFromP2P = 0;
+	prosumer_seller_toGrid_Addition = 0 ;
+	BuyersTotalDemand = 0;
+	BuyerFromP2P = 0;
  
 	Overall_numSellers = 0;
-	Overall_numProsumers = 0;
+	numProsumers_Total = 0;
 
-	Overall_pro_seller_consumption = 0;
 	Overall_Total_Supplies = 0;
-	Overall_pro_seller_ToP2P = 0 ;
-	
-	Overall_pro_consumer_from_Self = 0;
-	Overall_pro_consumer_from_Supp = 0;
+	prosumer_seller_ToP2P = 0 ;
 
 	Overall_Total_P2P_Profit = 0;
+	prosumer_seller_consumption = 0;
+
+	prosumer_consumer_from_Self = 0;
+	prosumer_consumer_from_Supp = 0;
 
 	File_Path_Generated  = "./PV_Generated_4KWp"+DATES+".csv"
 	File_Path_Seller_Consumed= "./prosumer"+DATES+".csv"
@@ -68,24 +74,43 @@ def main(numUsers, ratProsumers):
 	df_buyer_con = pd.read_csv(File_Path_Buyer_Consumed,sep = ',',low_memory=False)
 	df_buyer_con = df_buyer_con.iloc[: , 2:]
 	
+	battInit = 5	
+	battery_charged = [battInit for i in range(numProsumers)]
+
+	
+	#battery_charged = Battery_INIT
+
+	#print(sum(battery_charged))
 	
 	for time in range(0, Total_TIME):
+	
 
-		print(f"K time {time} ---------- ")
-		
+		print("***** TIME ",time,'*****' )
+
+		#print('battery_charged',battery_charged)
 		V_gen = df_gen.iloc[time].to_numpy()[0:numProsumers]
 		V_prosumer_con = df_prosumer_con.iloc[time].to_numpy()[0:numProsumers]
 		V_buyer_con = df_buyer_con.iloc[time].to_numpy()[0:numBuyers]
-	
-	
-		energyDifference = [V_gen[i] - V_prosumer_con[i] for i in range(numProsumers)]
+		
+		'''		
+		print(V_prosumer_con[0:15])
+		print(V_buyer_con[0:10])
+		print(V_gen[0:10])		
+		'''
+		#print('V_gen',V_gen)
+		#print('V_prosumer_con',V_prosumer_con)
+		#print('V_buyer_con',V_buyer_con)
+		self_power = [V_gen[i] + battery_charged[i] for i in range(numProsumers)]
+		energyDifference = [self_power[i] - V_prosumer_con[i] for i in range(numProsumers)]
 
 		Prosumer_isSellerArr = [diff > 0 for diff in energyDifference]	
 
-		#print("Prosumer_isSellerArr",Prosumer_isSellerArr)
+		#print('Prosumer_isSellerArr',Prosumer_isSellerArr)
 		numSellers = sum(Prosumer_isSellerArr);
-		Overall_numSellers +=numSellers;		
-		Overall_numProsumers += numProsumers;
+		Overall_numSellers +=numSellers;
+
+			
+		numProsumers_Total += numProsumers;
 	
 		Supplies= []
 
@@ -93,68 +118,82 @@ def main(numUsers, ratProsumers):
 			if Prosumer_isSellerArr[i]: # Seller
 				
 				Supplies.append(energyDifference[i])
-				Overall_pro_seller_consumption += V_prosumer_con[i]
+				prosumer_seller_consumption += V_prosumer_con[i] 
 
 			else: # consumer
-				
-				Overall_pro_consumer_from_Self += V_gen[i] 
-				Overall_pro_consumer_from_Supp += V_prosumer_con[i] - V_gen[i] 
+				Supplies.append(0)
+				prosumer_consumer_from_Self += self_power[i] 
+				prosumer_consumer_from_Supp += V_prosumer_con[i] - self_power[i] 
+	
 	
 		TotalSupply = sum(Supplies);
 		Overall_Total_Supplies += TotalSupply;
 
 		TotalDemand = sum(V_buyer_con);
-		Overall_Buyers_Demand += TotalDemand
-
-		Overall_BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
-
+		BuyersTotalDemand += TotalDemand
+		
 		if(TotalSupply>TotalDemand):
 			Supplies_to_P2P = [TotalDemand * amount/ TotalSupply for amount in Supplies]	
 		else:
 			Supplies_to_P2P = Supplies;
 
+	
+
+		if((Supplies_to_P2P)):
+			prosumer_seller_ToP2P += sum(Supplies_to_P2P)	
+			Supplies_to_P2P_Zero_removed = [i for i in Supplies_to_P2P if i != 0]
 			
-		### LEM ###
-		#print("## Time",time,'##')
-		#Supplies_to_P2P = [12,19,20,20,20,11,20,20,16,20, 12,19,20,20,20,11,20,20,16,20,20, 1, 20, 20, 11, 20, 12, 19, 20, 20, 20, 1, 20, 20, 11, 20, 12, 19, 20, 20, 20, 1, 20, 20, 11, 20, 12, 19, 20, 20, 20, 1, 20, 20, 11, 20]
-		#Supplies_to_P2P=[]
-		#for seller in range(0,numSellers):	
-		#	Supplies_to_P2P.append(((seller)%10)+10);
+			Overall_Total_P2P_Profit +=  LEM(Supplies_to_P2P_Zero_removed,TotalDemand, numBuyers,numSellers,time);	
 
-		if(sum(Supplies_to_P2P)):
+		BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
+		
+		for i in range(numProsumers):
+			if Prosumer_isSellerArr[i]: # Seller
+				
+				potential_charge = self_power[i] - V_prosumer_con [i]- Supplies_to_P2P[i]
+				
+					
+				if(potential_charge<=Max_BATTERY):
+					
+					battery_charged[i] = potential_charge;
+				else:
+					battery_charged[i]= Max_BATTERY;
+					prosumer_seller_toGrid_Addition += potential_charge - Max_BATTERY;
+					
+			else: # consumer
+				battery_charged[i]=0
 
-			Overall_pro_seller_ToP2P += sum(Supplies_to_P2P)
-
-			Overall_Total_P2P_Profit +=  LEM(Supplies_to_P2P,TotalDemand, numBuyers,numSellers,time);
+		#if(time==Total_TIME):
+			#print('battery_charged',battery_charged)
 			
-		
-	BuyerFromSupp = Overall_Buyers_Demand  - Overall_BuyerFromP2P
-	consumer_ratio = (Overall_numSellers)/Overall_numProsumers *100
-	prosumer_seller_toGrid = Overall_Total_Supplies - Overall_pro_seller_ToP2P
+	 
+	BuyerFromSupp = BuyersTotalDemand  - BuyerFromP2P
+	seller_ratio = (Overall_numSellers)/numProsumers_Total *100
+	prosumer_seller_toGrid = Overall_Total_Supplies - prosumer_seller_ToP2P + prosumer_seller_toGrid_Addition
 		
 
-	#print(Overall_BuyerFromP2P)
+	#print(BuyerFromP2P)
 	#print(BuyerFromSupp)
-	#print(consumer_ratio)
-	
-	#print(Overall_pro_seller_ToP2P)
-	#print(prosumer_seller_toGrid)
-	#print(Overall_pro_seller_consumption)
-	#print(Overall_pro_consumer_from_Self);
-	#print(Overall_pro_consumer_from_Supp);
+	#print(seller_ratio)
+	#print(prosumer_seller_ToP2P)	
+	#print(prosumer_seller_toGrid_Addition)
+	#print(prosumer_seller_consumption)
+	#print(prosumer_consumer_from_Self);
+	#print(prosumer_consumer_from_Supp);
+	#print(sum(battery_charged))
 
-	#print(Overall_Buyers_Demand * SupPrice/ 100)
-	#print(Overall_pro_consumer_from_Supp *SupPrice/100)
-	#print(Overall_Total_Supplies * FiT/100)
-
-	#print((prosumer_seller_toGrid * FiT + Overall_Total_P2P_Profit - Overall_pro_consumer_from_Supp *SupPrice ) /100 )
-	#print((BuyerFromSupp * SupPrice + Overall_Total_P2P_Profit )/100)
+	#print((Overall_Total_Supplies * FiT - prosumer_consumer_from_Supp *SupPrice ) /100 )
+	print(BuyersTotalDemand*SupPrice/100)
 	
+
+	#print('prosumer_seller_toGrid',prosumer_seller_toGrid)
+
+	#print('battery_charged',battery_charged)
+
 
 def LEM(Supplies_to_P2P,TotalDemand, numBuyers,numSellers,time):
 
-	#print('Supplies_to_P2P',Supplies_to_P2P)
-	print('Sum_Supplies_to_P2P',sum(Supplies_to_P2P))
+	
 	global numToPlot;
 	numToPlot = min(10,numSellers) ;
 
@@ -200,7 +239,7 @@ def LEM(Supplies_to_P2P,TotalDemand, numBuyers,numSellers,time):
 		
 		exit=1;
 		for seller in range(0,numSellers):
-			if(abs((Demands[seller]-Supplies_to_P2P[seller]))>0.03):
+			if(abs((Demands[seller]-Supplies_to_P2P[seller]))>0.01):
 				exit=0;
 				break;
 			
@@ -300,8 +339,7 @@ def plotPrices():
 if __name__ == '__main__':
 
 	main(40,50)
-	
-	'''	
+	'''
 	main(40,25)
 	main(80,25)	
 	main(120,25)
@@ -319,9 +357,12 @@ if __name__ == '__main__':
 	main(120,75)
 	main(160,75)
 	main(200,75)
-	'''	
 
-	print("Finished MMM!")
+	'''
+
+
+
+	print("Finished!")
 	#main(100,50)
 
 

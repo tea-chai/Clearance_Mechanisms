@@ -27,7 +27,7 @@ SupPrice = 40;
 
 eta_1 = 4
 eta_2 = 0.001;
-Theta = 20;
+Theta = 50;
 Lambda= 40.1;
 
 DATES = "_21_April";
@@ -121,6 +121,8 @@ def main(numUsers, ratProsumers):
 			Overall_pro_seller_ToP2P += sum(Supplies_to_P2P)
 			if(numSellers>1):
 				Overall_Total_P2P_Profit +=  PFET(Supplies_to_P2P, numBuyers,numSellers,time);
+			else:
+				Overall_Total_P2P_Profit += SupPrice
 			
 		
 	BuyerFromSupp = Overall_Buyers_Demand  - Overall_BuyerFromP2P
@@ -194,7 +196,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 		
 		exit=1;
 		for seller in range(0,numSellers):
-			if(abs((sellerDemands[seller]-Supplies_to_P2P[seller]))>0.01):
+			if(abs((sellerDemands[seller]-Supplies_to_P2P[seller]))>0.025):
 				exit=0;
 				break;
 			
