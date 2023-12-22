@@ -27,11 +27,12 @@ FiT= 8 ;
 SupPrice = 40;
 
 eta_1 = 3
-
+eta_2 = 0.001;
 Theta = 25;
 Lambda= 40.1;
 
 STOP_difference = 0.05;
+
 
 DATES = "_21_April"; Total_TIME = 24;
 #DATES = "_6_November"; Total_TIME = 24;
