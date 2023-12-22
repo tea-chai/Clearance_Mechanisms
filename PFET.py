@@ -26,7 +26,7 @@ FiT= 8 ;
 SupPrice = 40;
 
 eta_1 = 3
-eta_2 = 0.0001;
+eta_2 = 0.001;
 Theta = 25;
 Lambda= 40.1;
 
