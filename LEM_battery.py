@@ -26,10 +26,11 @@ FiT= 8 ;
 SupPrice = 40;
 
 eta_1 = 4
-eta_2 = 0.001;
-Theta = 20;
+
+Theta = 50;
 Lambda= 40.1;
 
+STOP_difference = 0.01;
 DATES = "";
 
 Max_BATTERY = 20;
@@ -239,7 +240,7 @@ def LEM(Supplies_to_P2P,TotalDemand, numBuyers,numSellers,time):
 		
 		exit=1;
 		for seller in range(0,numSellers):
-			if(abs((Demands[seller]-Supplies_to_P2P[seller]))>0.01):
+			if(abs((Demands[seller]-Supplies_to_P2P[seller]))>STOP_difference):
 				exit=0;
 				break;
 			

@@ -27,8 +27,10 @@ SupPrice = 40;
 
 eta_1 = 4
 eta_2 = 0.001;
-Theta = 20;
+Theta = 50;
 Lambda= 40.1;
+
+STOP_difference = 0.01;
 
 DATES = "";
 
@@ -242,7 +244,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 		
 		exit=1;
 		for seller in range(0,numSellers):
-			if(abs((sellerDemands[seller]-Supplies_to_P2P[seller]))>0.025):
+			if(abs((sellerDemands[seller]-Supplies_to_P2P[seller]))>STOP_difference):
 				exit=0;
 				break;
 			
