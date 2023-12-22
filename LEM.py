@@ -21,12 +21,13 @@ for i in range(numToPlot):
 	globals()[f'state{i}'] = []	
 
 
+Total_TIME = 24;
 PLOT_TIME = 12
 FiT= 8 ;
 SupPrice = 40;
 
-eta_1 = 4
-eta_2 = 0.001;
+eta_1 = 3
+eta_2 = 0.0001;
 Theta = 25;
 Lambda= 40.1;
 

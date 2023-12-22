@@ -26,17 +26,17 @@ FiT= 8 ;
 SupPrice = 40;
 
 eta_1 = 3
-eta_2 = 0.001;
+eta_2 = 0.0001;
 Theta = 25;
 Lambda= 40.1;
 
 STOP_difference = 0.05;
 
-#DATES = "_21_April"; Total_TIME = 24;
+DATES = "_21_April"; Total_TIME = 24;
 #DATES = "_6_November"; Total_TIME = 24;
 #DATES = "_August"; Total_TIME = 744;
 #DATES = "_January"; Total_TIME = 744;
-DATES = ""; Total_TIME = 8784;
+#DATES = ""; Total_TIME = 8784;
 
 Max_BATTERY = 20;
 

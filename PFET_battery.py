@@ -11,6 +11,7 @@ import pandas as pd
 import random
 import sys	
 
+
 numToPlot = 10;
 
 for i in range(numToPlot):
@@ -25,25 +26,27 @@ PLOT_TIME = 12
 FiT= 8 ;
 SupPrice = 40;
 
-eta_1 = 4
-eta_2 = 0.001;
+eta_1 = 3
+eta_2 = 0.0001;
 Theta = 25;
 Lambda= 40.1;
 
 STOP_difference = 0.05;
 
-DATES = "_21_April"; Total_TIME = 24;
+#DATES = "_21_April"; Total_TIME = 24;
 #DATES = "_6_November"; Total_TIME = 24;
 #DATES = "_August"; Total_TIME = 744;
 #DATES = "_January"; Total_TIME = 744;
-#DATES = ""; Total_TIME = 8784;
+DATES = ""; Total_TIME = 8784;
 
 Max_BATTERY = 20;
 
-#def main(numUsers, ratProsumers, Battery_INIT):  
+#def main(numUsers, ratProsumers, Battery_INIT): 
+EXCEEDED = 0; 
+
 def main(numUsers, ratProsumers):  
 
-
+	
 	#print("*****", numUsers, ratProsumers, "***")
 	percentageProsumers = ratProsumers;
 	percentageBuyers = 100 - ratProsumers;
@@ -91,7 +94,7 @@ def main(numUsers, ratProsumers):
 	for time in range(0, Total_TIME):
 	
 
-		print("***** TIME ",time,'*****' )
+		#print("***** TIME ",time,'*****' )
 
 		#print('battery_charged',battery_charged)
 		V_gen = df_gen.iloc[time].to_numpy()[0:numProsumers]
@@ -152,7 +155,7 @@ def main(numUsers, ratProsumers):
 			if(numSellers>1):
 				Overall_Total_P2P_Profit +=  PFET(Supplies_to_P2P_Zero_removed, numBuyers,numSellers,time);
 			else:
-				Overall_Total_P2P_Profit += SupPrice
+				Overall_Total_P2P_Profit += SupPrice * Supplies_to_P2P [0]
 
 		BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
 		
@@ -192,13 +195,14 @@ def main(numUsers, ratProsumers):
 	#print(sum(battery_charged))
 
 	#print((Overall_Total_Supplies * FiT - prosumer_consumer_from_Supp *SupPrice ) /100 )
-	print(BuyersTotalDemand*SupPrice/100)
+	#print(BuyersTotalDemand*SupPrice/100)
+	#print('EXCEEDED',EXCEEDED)
 	
 
 	#print('prosumer_seller_toGrid',prosumer_seller_toGrid)
 
 	#print('battery_charged',battery_charged)
-
+	print('global EXCEEDED;',EXCEEDED)
 
 def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 
@@ -221,14 +225,16 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 		#print(f"ITERATION {ITERATION} ---------- ")
 		ITERATION +=1;
 		
-		if(ITERATION>500):
-			print("prices",prices[0:numSellers])
+		#if(ITERATION>500):
+		#	global EXCEEDED;
+		#	print("prices",prices[0:numSellers])
 			
-			print('Supplies_to_P2P',Supplies_to_P2P)
-			print('sellerDemands',sellerDemands)
-			plotPrices();
-			plotDemand();
-			quit('ALERT ITER');
+		#	print('Supplies_to_P2P',Supplies_to_P2P)
+		#	print('sellerDemands',sellerDemands)
+		#	plotPrices();
+		#	plotDemand();
+			#if(time!=426):
+				#quit('ALERT ITER');
 
 		#print("prices",prices[0:10])
 		appendPrices(prices);
@@ -237,13 +243,16 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 			if(states[ilm]<0):
 				quit('ALERT NEG');
 		if(time==-1):
-			print('Z prices',prices[0:numSellers])
+			print(' ========  Z prices',prices[0:numSellers])
 			
 		sellerDemands , states = buyers_algorithm(prices, thetas, lambdas, states,time);
 		#print(sellerDemands)
 		if(time==-1):
+			print('======== Supplies_to_P2P',Supplies_to_P2P[0:numSellers])
 			print('Z sellerDemands',sellerDemands[0:numSellers])
-			print('Z Supplies_to_P2P',Supplies_to_P2P[0:numSellers])
+			print('Z prices',prices[0:numSellers])
+			
+			print('Z states',states[0:numSellers])
 			if(ITERATION>3):
 				quit('ALERT DEMAND');
 		appendDemands(sellerDemands);
@@ -262,6 +271,11 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 				exit=0;
 				break;
 			
+		if(ITERATION>200):
+			#print('EXCEEDED')
+			global EXCEEDED;
+			EXCEEDED += 1; 
+			exit=1;
 		
 		if(exit==1):
 
@@ -270,9 +284,9 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 			for seller in range(0,numSellers):	
 				Total_P2P_Profit += Supplies_to_P2P[seller]* prices[seller];
 			
-			if(time==PLOT_TIME):
-				plotPrices();
-				plotDemand();
+			#if(time==PLOT_TIME):
+			#	plotPrices();
+			#	plotDemand();
 			clearPlots();
 			return Total_P2P_Profit;
 					
@@ -359,22 +373,37 @@ if __name__ == '__main__':
 	
 	
 	main(40,25)
-	main(80,25)	
+	print('finito 1');
+	main(80,25)
+	print('finito 2');	
 	main(120,25)
+	print('finito 3');
 	main(160,25)
+	print('finito 4');
 	main(200,25)
+	print('finito 5');
 
 	main(40,50)
+	print('finito 6');
 	main(80,50)
+	print('finito 7');
 	main(120,50)
+	print('finito 8');
 	main(160,50)
+	print('finito 9');
 	main(200,50)
+	print('finito 10');
 
 	main(40,75)
+	print('finito 11');
 	main(80,75)
+	print('finito 12');
 	main(120,75)
+	print('finito 13');
 	main(160,75)
+	print('finito 14');
 	main(200,75)
+	print('finito 15');
 
 	
 
