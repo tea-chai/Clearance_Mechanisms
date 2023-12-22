@@ -34,11 +34,11 @@ Lambda= 40.1;
 STOP_difference = 0.05;
 
 
-DATES = "_21_April"; Total_TIME = 24;
+#DATES = "_21_April"; Total_TIME = 24;
 #DATES = "_6_November"; Total_TIME = 24;
 #DATES = "_August"; Total_TIME = 744;
 #DATES = "_January"; Total_TIME = 744;
-#DATES = ""; Total_TIME = 8784;
+DATES = ""; Total_TIME = 8784;
 
 
 def main(numUsers, ratProsumers):  
@@ -223,9 +223,9 @@ def LEM(Supplies_to_P2P,TotalDemand, numBuyers,numSellers,time):
 			for seller in range(0,numSellers):	
 				Total_P2P_Profit += Supplies_to_P2P[seller]* prices[seller];
 			
-			if(time==PLOT_TIME):
-				plotPrices();
-				plotDemand();	
+			#if(time==PLOT_TIME):
+			#	plotPrices();
+			#	plotDemand();	
 			#plotStates();
 			clearPlots();
 			return Total_P2P_Profit;
@@ -310,27 +310,41 @@ def plotPrices():
 
 if __name__ == '__main__':
 
-	main(40,50)
-	
-	'''	
 	main(40,25)
-	main(80,25)	
+	print('finito 1');
+	main(80,25)
+	print('finito 2');	
 	main(120,25)
+	print('finito 3');
 	main(160,25)
+	print('finito 4');
 	main(200,25)
+	print('finito 5');
 
 	main(40,50)
+	print('finito 6');
 	main(80,50)
+	print('finito 7');
 	main(120,50)
+	print('finito 8');
 	main(160,50)
+	print('finito 9');
 	main(200,50)
+	print('finito 10');
 
 	main(40,75)
+	print('finito 11');
 	main(80,75)
+	print('finito 12');
 	main(120,75)
+	print('finito 13');
 	main(160,75)
+	print('finito 14');
 	main(200,75)
-	'''	
+	print('finito 15');
+
+	
+
 
 	print("Finished MMM!")
 	#main(100,50)
