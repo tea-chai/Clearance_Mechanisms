@@ -140,9 +140,10 @@ def main(numUsers, ratProsumers):
 		BuyersTotalDemand += TotalDemand
 		
 		if(TotalSupply>TotalDemand):
-			Supplies_to_P2P = [TotalDemand * amount/ TotalSupply for amount in Supplies]	
+			Supplies_to_P2P = [TotalDemand * supply/ TotalSupply for supply in Supplies]	
 		else:
-			Supplies_to_P2P = Supplies;
+			Supplies_to_P2P = Supplies;	
+		
 
 	
 		Supplies_to_P2P_Zero_removed = [i for i in Supplies_to_P2P if i != 0]

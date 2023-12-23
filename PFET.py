@@ -115,9 +115,10 @@ def main(numUsers, ratProsumers):
 		Overall_BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
 
 		if(TotalSupply>TotalDemand):
-			Supplies_to_P2P = [TotalDemand * amount/ TotalSupply for amount in Supplies]	
+			Supplies_to_P2P = [TotalDemand * supply/ TotalSupply for supply in Supplies]	
 		else:
-			Supplies_to_P2P = Supplies;
+			Supplies_to_P2P = Supplies;	
+		
 
 			
 		### PFET ###
@@ -300,8 +301,8 @@ def plotPrices():
 
 if __name__ == '__main__':
 
-	main(40,50)
-	'''
+	
+	
 		
 	main(40,25)
 	main(80,25)	
@@ -320,7 +321,7 @@ if __name__ == '__main__':
 	main(120,75)
 	main(160,75)
 	main(200,75)
-	'''	
+		
 
 	print("Finished! MMM")
 	#main(100,50)

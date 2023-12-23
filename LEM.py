@@ -80,7 +80,7 @@ def main(numUsers, ratProsumers):
 	
 	for time in range(0, Total_TIME):
 
-		print(f"time {time} ---------- ")
+		#print(f"time {time} ---------- ")
 		
 		V_gen = df_gen.iloc[time].to_numpy()[0:numProsumers]
 		V_prosumer_con = df_prosumer_con.iloc[time].to_numpy()[0:numProsumers]
@@ -114,13 +114,13 @@ def main(numUsers, ratProsumers):
 		Overall_Buyers_Demand += TotalDemand
 
 		Overall_BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
-
+		
 		if(TotalSupply>TotalDemand):
-			Supplies_to_P2P = [TotalDemand * amount/ TotalSupply for amount in Supplies]	
+			Supplies_to_P2P = [TotalDemand * supply/ TotalSupply for supply in Supplies]	
 		else:
-			Supplies_to_P2P = Supplies;
-
-
+			Supplies_to_P2P = Supplies;	
+		
+			
 		if(sum(Supplies_to_P2P)):
 
 			Overall_pro_seller_ToP2P += sum(Supplies_to_P2P)
@@ -131,7 +131,7 @@ def main(numUsers, ratProsumers):
 	consumer_ratio = (Overall_numSellers)/Overall_numProsumers *100
 	prosumer_seller_toGrid = Overall_Total_Supplies - Overall_pro_seller_ToP2P
 		
-
+	
 	#print(Overall_BuyerFromP2P)
 	#print(BuyerFromSupp)
 	#print(consumer_ratio)
@@ -146,8 +146,16 @@ def main(numUsers, ratProsumers):
 	#print(Overall_pro_consumer_from_Supp *SupPrice/100)
 	#print(Overall_Total_Supplies * FiT/100)
 
+	#print(( Overall_Total_P2P_Profit )/100)
+	#print((BuyerFromSupp * SupPrice  )/100)
+
+	#print(( Overall_pro_consumer_from_Supp *SupPrice ) /100 )
+	#print(( Overall_Total_P2P_Profit )/100)
+	print((prosumer_seller_toGrid * FiT ) /100 )
+
+	
 	#print((prosumer_seller_toGrid * FiT + Overall_Total_P2P_Profit - Overall_pro_consumer_from_Supp *SupPrice ) /100 )
-	#print((BuyerFromSupp * SupPrice + Overall_Total_P2P_Profit )/100)
+	
 	
 
 def LEM(Supplies_to_P2P, numBuyers,numSellers,time):
@@ -159,14 +167,13 @@ def LEM(Supplies_to_P2P, numBuyers,numSellers,time):
 	thetas = [Theta for _ in range(numBuyers)]
 	lambdas = [Lambda for _ in range(numBuyers)]
 	
+	P2P_TOT = sum(Supplies_to_P2P);
 	
 	#prices = [random.randrange(FiT +1,SupPrice) for _ in range(numSellers)];
 
 	prices = [28, 24, 29, 35, 35, 37, 21, 35, 19, 22, 24, 23, 37, 17, 30, 33, 23, 37, 15, 29, 38, 14, 27, 29, 16, 18, 27, 35, 31, 17, 20, 13, 23, 14, 15, 20, 34, 30, 39, 9, 15, 20, 34, 25, 15, 20, 14, 29, 30, 34, 25, 27, 34, 13, 10, 11, 16, 31, 22, 15, 26, 38, 27, 12, 36, 10, 23, 34, 25, 33, 23, 27, 28, 24, 30, 26, 13, 15, 19, 28, 10, 32, 31, 10, 27, 25, 30, 20, 18, 11, 10, 9, 34, 9, 13, 33, 31, 12, 33, 26, 33, 38, 9, 34, 14, 25, 33, 28, 18, 30, 15, 12, 15, 13, 33, 12, 15, 19, 35, 19, 28, 9, 30, 15, 32, 30, 16, 32, 31, 20, 37, 21, 10, 14, 23, 24, 26, 17, 24, 39, 15, 12, 9, 14, 10, 12, 24, 12, 18, 20, 16, 24, 10, 18, 29, 28, 37, 20, 32, 36, 26, 11, 28, 15, 36, 21, 21, 33, 20, 28, 38, 24, 13, 28, 39, 39, 12, 17, 26, 33, 19, 9, 13, 11, 35, 36, 37, 28, 25, 10, 22, 19, 29, 12, 37, 38, 22, 25, 12, 27]
 	
-	P2P_TOT = sum(Supplies_to_P2P);
-	
-	
+		
 	while(True):		
 		
 		appendPrices(prices);
@@ -194,11 +201,11 @@ def LEM(Supplies_to_P2P, numBuyers,numSellers,time):
 			Total_P2P_Profit = 0;
 			
 			for seller in range(0,numSellers):	
-				Total_P2P_Profit += Supplies_to_P2P[seller]* prices[seller];
+				Total_P2P_Profit += Supplies_to_P2P[seller] * prices[seller];
 			
-			if(time==PLOT_TIME):
-				plotPrices();
-				plotDemand();	
+			#if(time==PLOT_TIME):
+			#	plotPrices();
+			#	plotDemand();	
 			
 			clearPlots();
 			return Total_P2P_Profit;
@@ -278,38 +285,22 @@ def plotPrices():
 if __name__ == '__main__':
 
 	main(40,25)
-	print('finito 1');
-	main(80,25)
-	print('finito 2');	
+	main(80,25)	
 	main(120,25)
-	print('finito 3');
 	main(160,25)
-	print('finito 4');
 	main(200,25)
-	print('finito 5');
 
 	main(40,50)
-	print('finito 6');
 	main(80,50)
-	print('finito 7');
 	main(120,50)
-	print('finito 8');
 	main(160,50)
-	print('finito 9');
 	main(200,50)
-	print('finito 10');
 
 	main(40,75)
-	print('finito 11');
 	main(80,75)
-	print('finito 12');
 	main(120,75)
-	print('finito 13');
 	main(160,75)
-	print('finito 14');
 	main(200,75)
-	print('finito 15');
-
 	
 
 
