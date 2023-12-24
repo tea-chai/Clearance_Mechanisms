@@ -34,9 +34,9 @@ Lambda= 40.1;
 STOP_difference = 0.05;
 
 
-DATES = "_21_April"; Total_TIME = 24;
+#DATES = "_21_April"; Total_TIME = 24;
 #DATES = "_6_November"; Total_TIME = 24;
-#DATES = "_August"; Total_TIME = 744;
+DATES = "_August"; Total_TIME = 744;
 #DATES = "_January"; Total_TIME = 744;
 #DATES = ""; Total_TIME = 8784;
 
@@ -147,14 +147,14 @@ def main(numUsers, ratProsumers):
 	#print(Overall_Total_Supplies * FiT/100)
 
 	#print(( Overall_Total_P2P_Profit )/100)
-	#print((BuyerFromSupp * SupPrice  )/100)
+	print((BuyerFromSupp * SupPrice  )/100)
 
 	#print(( Overall_pro_consumer_from_Supp *SupPrice ) /100 )
 	#print(( Overall_Total_P2P_Profit )/100)
-	print((prosumer_seller_toGrid * FiT ) /100 )
+	#print((prosumer_seller_toGrid * FiT ) /100 )
 
 	
-	#print((prosumer_seller_toGrid * FiT + Overall_Total_P2P_Profit - Overall_pro_consumer_from_Supp *SupPrice ) /100 )
+	
 	
 	
 

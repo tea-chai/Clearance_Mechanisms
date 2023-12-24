@@ -234,8 +234,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 		#	print('sellerDemands',sellerDemands)
 		#	plotPrices();
 		#	plotDemand();
-			#if(time!=426):
-				#quit('ALERT ITER');
+		
 
 		#print("prices",prices[0:10])
 		appendPrices(prices);
@@ -248,14 +247,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 			
 		sellerDemands , states = buyers_algorithm(prices, thetas, lambdas, states,time);
 		#print(sellerDemands)
-		if(time==-1):
-			print('======== Supplies_to_P2P',Supplies_to_P2P[0:numSellers])
-			print('Z sellerDemands',sellerDemands[0:numSellers])
-			print('Z prices',prices[0:numSellers])
-			
-			print('Z states',states[0:numSellers])
-			if(ITERATION>3):
-				quit('ALERT DEMAND');
+		
 		appendDemands(sellerDemands);
 		appendStates(states)
 		for seller in range(0,numSellers):	
