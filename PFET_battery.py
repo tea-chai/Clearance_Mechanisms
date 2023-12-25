@@ -15,7 +15,7 @@ import winsound
 frequency = 1500  # Set Frequency To 2500 Hertz
 duration = 1000  # Set Duration To 1000 ms == 1 second
 
-P2P_flag=False
+P2P_flag=True
 numToPlot = 10;
 
 for i in range(numToPlot):
@@ -40,8 +40,8 @@ STOP_difference = 0.05;
 #DATES = "_21_April"; Total_TIME = 24;
 #DATES = "_6_November"; Total_TIME = 24;
 #DATES = "_August"; Total_TIME = 744;
-DATES = "_January"; Total_TIME = 744;
-#DATES = ""; Total_TIME = 8784;
+#DATES = "_January"; Total_TIME = 744;
+DATES = ""; Total_TIME = 8784;
 
 Max_BATTERY = 20;
 
@@ -222,7 +222,7 @@ def main(numUsers, ratProsumers):
 
 	#print(( Overall_pro_consumer_from_Supp *SupPrice ) /100 ,end=',  ')
 	#print(( Overall_Total_P2P_Profit )/100,end=',  ')
-	print((Overall_pro_seller_toGrid_Addition * FiT ) /100 ,end=',  ')
+	#print((Overall_pro_seller_toGrid_Addition * FiT ) /100 ,end=',  ')
 
 	 
 	battery_final_sum = sum(battery_charged)	

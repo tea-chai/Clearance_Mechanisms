@@ -149,12 +149,12 @@ def main(numUsers, ratProsumers):
 	#print(Overall_pro_consumer_from_Supp *SupPrice/100,end=',  ')
 	#print(Overall_Total_Supplies * FiT/100,end=',  ')
 
-	print(( Overall_Total_P2P_Profit )/100,end=',  ')
+	#print(( Overall_Total_P2P_Profit )/100,end=',  ')
 	#print((BuyerFromSupp * SupPrice  )/100,end=',  ')
 
 	#print(( Overall_pro_consumer_from_Supp *SupPrice ) /100 ,end=',  ')
 	#print(( Overall_Total_P2P_Profit )/100,end=',  ')
-	#print((prosumer_seller_toGrid * FiT ) /100 ,end=',  ')
+	print((prosumer_seller_toGrid * FiT ) /100 ,end=',  ')
 
 
 	
