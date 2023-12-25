@@ -11,6 +11,11 @@ import pandas as pd
 import random
 import sys
 
+import winsound
+frequency = 1500  # Set Frequency To 2500 Hertz
+duration = 1000  # Set Duration To 1000 ms == 1 second
+
+
 numToPlot = 10;
 
 for i in range(numToPlot):
@@ -21,12 +26,12 @@ for i in range(numToPlot):
 	globals()[f'state{i}'] = []	
 
 
-PLOT_TIME = 12
+PLOT_TIME = -1
 FiT= 8 ;
 SupPrice = 40;
 
 eta_1 = 3
-eta_2 = 0.001;
+eta_2 = 0.0001;
 Theta = 25;
 Lambda= 40.1;
 
@@ -34,10 +39,10 @@ STOP_difference = 0.05;
 
 
 #DATES = "_21_April"; Total_TIME = 24;
-DATES = "_6_November"; Total_TIME = 24;
+#DATES = "_6_November"; Total_TIME = 24;
 #DATES = "_August"; Total_TIME = 744;
 #DATES = "_January"; Total_TIME = 744;
-#DATES = ""; Total_TIME = 8784;
+DATES = ""; Total_TIME = 8784;
 
 EXCEEDED = 0; 
 
@@ -147,16 +152,16 @@ def main(numUsers, ratProsumers):
 	#print(Overall_pro_consumer_from_Self);
 	#print(Overall_pro_consumer_from_Supp);
 
-	#print(Overall_Buyers_Demand * SupPrice/ 100)
-	#print(Overall_pro_consumer_from_Supp *SupPrice/100)
-	#print(Overall_Total_Supplies * FiT/100)
+	#print(Overall_Buyers_Demand * SupPrice/ 100 ,end=',  ')
+	#print(Overall_pro_consumer_from_Supp *SupPrice/100,end=',  ')
+	#print(Overall_Total_Supplies * FiT/100,end=',  ')
 
-	#print(( Overall_Total_P2P_Profit )/100)
-	#print((BuyerFromSupp * SupPrice  )/100)
+	print(( Overall_Total_P2P_Profit )/100,end=',  ')
+	#print((BuyerFromSupp * SupPrice  )/100,end=',  ')
 
-	#print(( Overall_pro_consumer_from_Supp *SupPrice ) /100 )
-	#print(( Overall_Total_P2P_Profit )/100)
-	#print((prosumer_seller_toGrid * FiT ) /100 )
+	#print(( Overall_pro_consumer_from_Supp *SupPrice ) /100 ,end=',  ')
+	#print(( Overall_Total_P2P_Profit )/100,end=',  ')
+	#print((prosumer_seller_toGrid * FiT ) /100 ,end=',  ')
 
 	
 
@@ -184,6 +189,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 		
 		for idx in range(0,numSellers):
 			if(states[idx]<0):
+				winsound.Beep(frequency, 2000)
 				quit('ALERT NEG');
 		
 		sellerDemands , states = buyers_algorithm(prices, thetas, lambdas, states);
@@ -216,9 +222,9 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 			for seller in range(0,numSellers):	
 				Total_P2P_Profit += Supplies_to_P2P[seller]* prices[seller];
 			
-			#if(time==PLOT_TIME):
-			#	plotPrices();
-			#	plotDemand();
+			if(time==PLOT_TIME):
+				plotPrices();
+				plotDemand();
 			clearPlots();
 			return Total_P2P_Profit;
 					
@@ -301,9 +307,8 @@ def plotPrices():
 
 if __name__ == '__main__':
 
+
 	
-	
-		
 	main(40,25)
 	main(80,25)	
 	main(120,25)
@@ -321,8 +326,8 @@ if __name__ == '__main__':
 	main(120,75)
 	main(160,75)
 	main(200,75)
-		
-
+			
+	winsound.Beep(frequency, duration)
 	print("Finished! MMM")
 	#main(100,50)
 
