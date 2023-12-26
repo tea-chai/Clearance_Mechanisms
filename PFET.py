@@ -26,7 +26,7 @@ for i in range(numToPlot):
 	globals()[f'state{i}'] = []	
 
 
-PLOT_TIME = -1
+PLOT_TIME = 12
 FiT= 8 ;
 SupPrice = 40;
 
@@ -38,11 +38,11 @@ Lambda= 40.1;
 STOP_difference = 0.05;
 
 
-#DATES = "_21_April"; Total_TIME = 24;
+DATES = "_21_April"; Total_TIME = 24;
 #DATES = "_6_November"; Total_TIME = 24;
 #DATES = "_August"; Total_TIME = 744;
 #DATES = "_January"; Total_TIME = 744;
-DATES = ""; Total_TIME = 8784;
+#DATES = ""; Total_TIME = 8784;
 
 EXCEEDED = 0; 
 
@@ -309,6 +309,8 @@ if __name__ == '__main__':
 
 
 	
+	main(40,50)
+	'''
 	main(40,25)
 	main(80,25)	
 	main(120,25)
@@ -326,6 +328,7 @@ if __name__ == '__main__':
 	main(120,75)
 	main(160,75)
 	main(200,75)
+	'''
 			
 	winsound.Beep(frequency, duration)
 	print("Finished! MMM")
