@@ -16,7 +16,7 @@ frequency = 1500  # Set Frequency To 2500 Hertz
 duration = 1000  # Set Duration To 1000 ms == 1 second
 
 
-numToPlot = 13;
+numToPlot = 10;
 
 for i in range(numToPlot):
     globals()[f'price{i}'] = []
@@ -38,9 +38,9 @@ Lambda= 40.1;
 STOP_difference = 0.05;
 
 
-DATES = "_21_April"; Total_TIME = 24;
+#DATES = "_21_April"; Total_TIME = 24;
 #DATES = "_6_November"; Total_TIME = 24;
-#DATES = "_August"; Total_TIME = 744;
+DATES = "_August"; Total_TIME = 744;
 #DATES = "_January"; Total_TIME = 744;
 #DATES = ""; Total_TIME = 8784;
 
@@ -95,9 +95,9 @@ def main(numUsers, ratProsumers):
 
 		Prosumer_isSellerArr = [diff > 0 for diff in energyDifference]	
 
-		#print("Prosumer_isSellerArr",Prosumer_isSellerArr)
+	
 		numSellers = sum(Prosumer_isSellerArr);
-		print('numSellers',numSellers)
+		
 		Overall_numSellers +=numSellers;		
 		Overall_numProsumers += numProsumers;
 	

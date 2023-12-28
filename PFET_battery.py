@@ -11,7 +11,7 @@ import pandas as pd
 import random
 import sys	
 
-import winsound
+#import winsound
 frequency = 1500  # Set Frequency To 2500 Hertz
 duration = 1000  # Set Duration To 1000 ms == 1 second
 
@@ -26,7 +26,7 @@ for i in range(numToPlot):
 	globals()[f'state{i}'] = []	
 
 
-PLOT_TIME = -1
+PLOT_TIME = 13
 FiT= 8 ;
 SupPrice = 40;
 
@@ -38,10 +38,10 @@ Lambda= 40.1;
 STOP_difference = 0.05;
 
 #DATES = "_21_April"; Total_TIME = 24;
-#DATES = "_6_November"; Total_TIME = 24;
+DATES = "_6_November"; Total_TIME = 24;
 #DATES = "_August"; Total_TIME = 744;
 #DATES = "_January"; Total_TIME = 744;
-DATES = ""; Total_TIME = 8784;
+#DATES = ""; Total_TIME = 8784;
 
 Max_BATTERY = 20;
 
@@ -254,7 +254,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 		
 		for idx in range(0,numSellers):
 			if(states[idx]<0):
-				winsound.Beep(frequency, 2000)
+				#winsound.Beep(frequency, 2000)
 				quit('ALERT NEG');
 		
 		sellerDemands , states = buyers_algorithm(prices, thetas, lambdas, states);
@@ -376,6 +376,8 @@ if __name__ == '__main__':
 
 
 	
+	main(40,50)
+	'''
 	main(40,25)
 	main(80,25)	
 	main(120,25)
@@ -393,10 +395,13 @@ if __name__ == '__main__':
 	main(120,75)
 	main(160,75)
 	main(200,75)
+	'''
 	
 
 	
-	winsound.Beep(frequency, duration)
+
+	
+	#winsound.Beep(frequency, duration)
 	print("Finished! MMM")
 
 	

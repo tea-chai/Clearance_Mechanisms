@@ -26,7 +26,7 @@ for i in range(numToPlot):
 
 
 
-PLOT_TIME = 13
+PLOT_TIME = 12
 FiT= 8 ;
 SupPrice = 40;
 
@@ -37,10 +37,10 @@ Lambda= 40.1;
 
 STOP_difference = 0.05;
 
-DATES = "_21_April"; Total_TIME = 24;
+#DATES = "_21_April"; Total_TIME = 24;
 #DATES = "_6_November"; Total_TIME = 24;
 #DATES = "_August"; Total_TIME = 744;
-#DATES = "_January"; Total_TIME = 744;
+DATES = "_January"; Total_TIME = 744;
 #DATES = ""; Total_TIME = 8784;
 
 
@@ -95,7 +95,7 @@ def main(numUsers, ratProsumers):
 		Prosumer_isSellerArr = [diff > 0 for diff in energyDifference]	
 
 		numSellers = sum(Prosumer_isSellerArr);
-		print('numSellers',numSellers)
+		
 		Overall_numSellers +=numSellers;		
 		Overall_numProsumers += numProsumers;
 	
