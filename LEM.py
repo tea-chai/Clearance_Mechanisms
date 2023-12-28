@@ -11,7 +11,7 @@ import pandas as pd
 import random
 import sys
 
-import winsound
+#import winsound
 frequency = 1500  # Set Frequency To 2500 Hertz
 duration = 1000  # Set Duration To 1000 ms == 1 second
 
@@ -37,7 +37,7 @@ Lambda= 40.1;
 
 STOP_difference = 0.05;
 
-#DATES = "_21_April"; Total_TIME = 24;
+DATES = "_21_April"; Total_TIME = 24;
 #DATES = "_6_November"; Total_TIME = 24;
 #DATES = "_August"; Total_TIME = 744;
 #DATES = "_January"; Total_TIME = 744;
@@ -310,7 +310,7 @@ if __name__ == '__main__':
 	main(200,75)
 	'''
 	
-	winsound.Beep(frequency, duration)
+	#winsound.Beep(frequency, duration)
 
 	print("Finished MMM!")
 	#main(100,50)
