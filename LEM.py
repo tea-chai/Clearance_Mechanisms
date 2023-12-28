@@ -26,7 +26,7 @@ for i in range(numToPlot):
 
 
 
-PLOT_TIME = 12
+PLOT_TIME = 13
 FiT= 8 ;
 SupPrice = 40;
 
@@ -95,6 +95,7 @@ def main(numUsers, ratProsumers):
 		Prosumer_isSellerArr = [diff > 0 for diff in energyDifference]	
 
 		numSellers = sum(Prosumer_isSellerArr);
+		print('numSellers',numSellers)
 		Overall_numSellers +=numSellers;		
 		Overall_numProsumers += numProsumers;
 	
@@ -154,7 +155,7 @@ def main(numUsers, ratProsumers):
 
 	#print(( Overall_pro_consumer_from_Supp *SupPrice ) /100 ,end=',  ')
 	#print(( Overall_Total_P2P_Profit )/100,end=',  ')
-	print((prosumer_seller_toGrid * FiT ) /100 ,end=',  ')
+	#print((prosumer_seller_toGrid * FiT ) /100 ,end=',  ')
 
 
 	

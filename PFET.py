@@ -11,12 +11,12 @@ import pandas as pd
 import random
 import sys
 
-import winsound
+#import winsound
 frequency = 1500  # Set Frequency To 2500 Hertz
 duration = 1000  # Set Duration To 1000 ms == 1 second
 
 
-numToPlot = 10;
+numToPlot = 13;
 
 for i in range(numToPlot):
     globals()[f'price{i}'] = []
@@ -26,7 +26,7 @@ for i in range(numToPlot):
 	globals()[f'state{i}'] = []	
 
 
-PLOT_TIME = 12
+PLOT_TIME = 13
 FiT= 8 ;
 SupPrice = 40;
 
@@ -97,6 +97,7 @@ def main(numUsers, ratProsumers):
 
 		#print("Prosumer_isSellerArr",Prosumer_isSellerArr)
 		numSellers = sum(Prosumer_isSellerArr);
+		print('numSellers',numSellers)
 		Overall_numSellers +=numSellers;		
 		Overall_numProsumers += numProsumers;
 	
@@ -157,7 +158,7 @@ def main(numUsers, ratProsumers):
 	#print(Overall_Total_Supplies * FiT/100,end=',  ')
 
 	#print(( Overall_Total_P2P_Profit )/100,end=',  ')
-	print((BuyerFromSupp * SupPrice  )/100,end=',  ')
+	#print((BuyerFromSupp * SupPrice  )/100,end=',  ')
 
 	#print(( Overall_pro_consumer_from_Supp *SupPrice ) /100 ,end=',  ')
 	#print(( Overall_Total_P2P_Profit )/100,end=',  ')
@@ -167,7 +168,6 @@ def main(numUsers, ratProsumers):
 
 def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 
-	
 	global numToPlot;
 	numToPlot = min(10,numSellers) ;
 
@@ -189,7 +189,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 		
 		for idx in range(0,numSellers):
 			if(states[idx]<0):
-				winsound.Beep(frequency, 2000)
+				#winsound.Beep(frequency, 2000)
 				quit('ALERT NEG');
 		
 		sellerDemands , states = buyers_algorithm(prices, thetas, lambdas, states);
@@ -330,7 +330,7 @@ if __name__ == '__main__':
 	main(200,75)
 	'''
 			
-	winsound.Beep(frequency, duration)
+	#winsound.Beep(frequency, duration)
 	print("Finished! MMM")
 	#main(100,50)
 
