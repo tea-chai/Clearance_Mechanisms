@@ -40,8 +40,8 @@ STOP_difference = 0.05;
 
 #DATES = "_21_April"; Total_TIME = 24;
 #DATES = "_6_November"; Total_TIME = 24;
-DATES = "_August"; Total_TIME = 744;
-#DATES = "_January"; Total_TIME = 744;
+#DATES = "_August"; Total_TIME = 744;
+DATES = "_January"; Total_TIME = 744;
 #DATES = ""; Total_TIME = 8784;
 
 EXCEEDED = 0; 

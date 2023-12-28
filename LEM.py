@@ -26,7 +26,7 @@ for i in range(numToPlot):
 
 
 
-PLOT_TIME = 12
+PLOT_TIME = 13
 FiT= 8 ;
 SupPrice = 40;
 
