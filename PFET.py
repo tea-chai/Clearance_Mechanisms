@@ -26,7 +26,7 @@ for i in range(numToPlot):
 	globals()[f'state{i}'] = []	
 
 
-PLOT_TIME = 13
+PLOT_TIME = 12
 FiT= 8 ;
 SupPrice = 40;
 
