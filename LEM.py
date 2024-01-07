@@ -37,10 +37,10 @@ Lambda= 40.1;
 
 STOP_difference = 0.05;
 
-#DATES = "_21_April"; Total_TIME = 24;
+DATES = "_21_April"; Total_TIME = 24;
 #DATES = "_6_November"; Total_TIME = 24;
 #DATES = "_August"; Total_TIME = 744;
-DATES = "_January"; Total_TIME = 744;
+#DATES = "_January"; Total_TIME = 744;
 #DATES = ""; Total_TIME = 8784;
 
 
@@ -120,15 +120,17 @@ def main(numUsers, ratProsumers):
 		Overall_BuyerFromP2P += TotalDemand if TotalDemand <= TotalSupply else TotalSupply
 		
 		if(TotalSupply>TotalDemand):
-			Supplies_to_P2P = [TotalDemand * supply/ TotalSupply for supply in Supplies]	
+			Supplies_to_P2P = [TotalDemand * supply/ TotalSupply for supply in Supplies]
+			P2P_TOT = TotalDemand;
 		else:
 			Supplies_to_P2P = Supplies;	
+			P2P_TOT = TotalSupply;
 		
 			
 		if(sum(Supplies_to_P2P)):
 
 			Overall_pro_seller_ToP2P += sum(Supplies_to_P2P)
-			Overall_Total_P2P_Profit +=  LEM(Supplies_to_P2P, numBuyers,numSellers,time);
+			Overall_Total_P2P_Profit +=  LEM(Supplies_to_P2P, P2P_TOT, numBuyers,numSellers,time);
 			
 		
 	BuyerFromSupp = Overall_Buyers_Demand  - Overall_BuyerFromP2P
@@ -163,7 +165,7 @@ def main(numUsers, ratProsumers):
 	
 	
 
-def LEM(Supplies_to_P2P, numBuyers,numSellers,time):
+def LEM(Supplies_to_P2P, P2P_TOT, numBuyers,numSellers,time):
 
 	
 	global numToPlot;
@@ -172,7 +174,7 @@ def LEM(Supplies_to_P2P, numBuyers,numSellers,time):
 	thetas = [Theta for _ in range(numBuyers)]
 	lambdas = [Lambda for _ in range(numBuyers)]
 	
-	P2P_TOT = sum(Supplies_to_P2P);
+	#P2P_TOT = sum(Supplies_to_P2P);
 	
 	#prices = [random.randrange(FiT +1,SupPrice) for _ in range(numSellers)];
 
@@ -209,6 +211,7 @@ def LEM(Supplies_to_P2P, numBuyers,numSellers,time):
 				Total_P2P_Profit += Supplies_to_P2P[seller] * prices[seller];
 			
 			if(time==PLOT_TIME):
+				print(prices)
 				plotPrices();
 				plotDemand();	
 			
