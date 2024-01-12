@@ -208,8 +208,28 @@ def LEM(Supplies_to_P2P, P2P_TOT, numBuyers,numSellers,time):
 
 		cipherWelfares , Worst_Case_Time_Buyers,aggregation_time =  evolutionaryGame_Enc(public_key,cipherPrices);
 
+		sellerWelfares_RND = [];	
+
+		timer_DEC_HC = 0;				
+
+		for C_welfare in cipherWelfares:
+			DEC_HC_start = timer()
+			sellerWelfares_RND.append(round(Dec(private_key,C_welfare),2));
+			DEC_HC_end = timer()
+			if((DEC_HC_end-DEC_HC_start)>timer_DEC_HC):
+				timer_DEC_HC = DEC_HC_end-DEC_HC_start;
+		
+		
+		Worst_Case_Time_Sellers +=timer_DEC_HC;
+
+		#print('sellerWelfares_temp_RND',sellerWelfares_temp_RND);
+		print('sellerWelfares round   ',sellerWelfares_RND);
+		
+		sellerWelfares = sellerWelfares_RND;
+		
 		W_B_J , W_TOT = buyers_algorithm(prices, thetas, lambdas, numSellers);
 		
+		quit()
 		Demands = [P2P_TOT*W_B_J[s_j]/W_TOT for s_j in range(0,numSellers)]
 		
 		appendDemands(Demands);

@@ -174,12 +174,9 @@ def main():
 
 			cipherWelfares , Worst_Case_Time_Buyers,aggregation_time =  evolutionaryGame_Enc(public_key,cipherPrices);
 
-			
-						
 			sellerWelfares_RND = [];	
 
-			timer_DEC_HC = 0;		
-			
+			timer_DEC_HC = 0;				
 
 			for C_welfare in cipherWelfares:
 				DEC_HC_start = timer()
