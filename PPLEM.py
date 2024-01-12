@@ -185,6 +185,17 @@ def LEM(Supplies_to_P2P, P2P_TOT, numBuyers,numSellers,time):
 		
 		appendPrices(prices);
 		
+		timer_ENC_HC = 0;
+
+		cipherPrices= [];
+		for seller in range(0,numSellers):	
+			ENC_HC_start = timer()
+			cipherPrices.append(Enc(public_key,prices[seller]));
+			ENC_HC_end = timer()
+			if((ENC_HC_end-ENC_HC_start)>timer_ENC_HC):
+				timer_ENC_HC = ENC_HC_end-ENC_HC_start;
+		
+
 		W_B_J , W_TOT = buyers_algorithm(prices, thetas, lambdas, numSellers);
 		
 		Demands = [P2P_TOT*W_B_J[s_j]/W_TOT for s_j in range(0,numSellers)]
