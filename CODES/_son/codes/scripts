@@ -1,0 +1,14 @@
+python3 Basic_Encrypted_timer.py 40 50 > out_40_50.txt
+python3 Basic_Encrypted_timer.py 80 50 > out_80_50.txt
+python3 Basic_Encrypted_timer.py 120 50 > out_120_50.txt
+python3 Basic_Encrypted_timer.py 40 25 > out_40_25.txt
+python3 Basic_Encrypted_timer.py 80 25 > out_80_25.txt
+python3 Basic_Encrypted_timer.py 120 25 > out_120_25.txt
+python3 Basic_Encrypted_timer.py 40 75 > out_40_75.txt
+python3 Basic_Encrypted_timer.py 80 75 > out_80_75.txt
+python3 Basic_Encrypted_timer.py 120 75 > out_120_75.txt
+
+python3 Basic_Encrypted_timer.py 160 50 > out_160_50.txt
+python3 Basic_Encrypted_timer.py 200 50 > out_200_50.txt
+python3 Basic_Encrypted_timer.py 160 25 > out_160_25.txt
+python3 Basic_Encrypted_timer.py 200 25 > out_200_25.txt

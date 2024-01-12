@@ -1,0 +1,4 @@
+numSellerIteration 8
+Avg_sellers_time 0.18966809275252672
+Avg_buyers_time 0.06734465875024398
+Avg_aggregation_time 29.750280225250208
