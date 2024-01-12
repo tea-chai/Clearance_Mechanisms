@@ -192,6 +192,8 @@ def LEM(Supplies_to_P2P, P2P_TOT, numBuyers,numSellers,time):
 		
 		appendPrices(prices);
 		
+		Worst_Case_Time_Sellers = 0;
+
 		timer_ENC_HC = 0;
 
 		cipherPrices= [];
@@ -202,6 +204,9 @@ def LEM(Supplies_to_P2P, P2P_TOT, numBuyers,numSellers,time):
 			if((ENC_HC_end-ENC_HC_start)>timer_ENC_HC):
 				timer_ENC_HC = ENC_HC_end-ENC_HC_start;
 		
+		Worst_Case_Time_Sellers +=timer_ENC_HC;
+
+		cipherWelfares , Worst_Case_Time_Buyers,aggregation_time =  evolutionaryGame_Enc(public_key,cipherPrices);
 
 		W_B_J , W_TOT = buyers_algorithm(prices, thetas, lambdas, numSellers);
 		
@@ -356,7 +361,60 @@ def Squaring(public_key,cipher):
 
 	return cRet;
 
+def evolutionaryGame_Enc(public_key,Enc_prices):
+	numBuyers =0
+	numSellers =0
+	a = Enc_prices[0];
+	Enc_welfares=[];
+	
+	Worst_Case_Time_Buyers = 0 ;
 
+	for buyer in range(0,numBuyers):
+		Buyer_HC_start = timer()
+		for seller in range(0,numSellers):
+			temp = ciphertext (((-1) * Enc_prices[seller].a + Lambda ) * (1/Theta));
+		Buyer_HC_end = timer()
+		if((Buyer_HC_end-Buyer_HC_start)>Worst_Case_Time_Buyers):
+					Worst_Case_Time_Buyers = Buyer_HC_end-Buyer_HC_start;
+
+	print("Worst_Case_Time_Buyers",Worst_Case_Time_Buyers);
+
+	aggregation_time=0;
+
+	for seller in range(0,numSellers):
+		
+		amountEnergy = [];
+		amountEnergy_Enc = [];
+
+	
+		for buyer in range(0,numBuyers):
+
+			Xji_Enc = ciphertext (((-1) * Enc_prices[seller].a + Lambda ) * (1/Theta));
+			
+			
+			amountEnergy_Enc.append(Xji_Enc);
+				
+		agg_start = timer();
+		Wbj_Enc = Smul(Squaring(public_key,amountEnergy_Enc[0]),(Theta/2));
+
+		
+		for buyer in range(1,numBuyers):
+
+			Wbj_Enc = Add( Wbj_Enc, Smul(Squaring(public_key,amountEnergy_Enc[buyer]),(Theta/2)))	
+
+		agg_end = timer();
+
+		aggregation_time += agg_end - agg_start;
+		'''
+		if(Wbj != Dec(private_key,Wbj_Enc)):
+			print('ERROR : NOT EQUAL')
+			exit();
+		'''
+
+		Enc_welfares.append(Wbj_Enc);
+
+	print("aggregation_time",aggregation_time);
+	return Enc_welfares, Worst_Case_Time_Buyers,aggregation_time;
 if __name__ == '__main__':
 
 	
