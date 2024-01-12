@@ -1,10 +1,14 @@
 
 import numpy as np
+from math import sqrt
 
 import matplotlib.pyplot as plt_demand
 import matplotlib.pyplot as plt_state
 import matplotlib.pyplot as plt_price
 import matplotlib.pyplot as plt
+
+from phe import paillier
+from timeit import default_timer as timer
 
 import pandas as pd
 
@@ -45,6 +49,8 @@ DATES = "_21_April"; Total_TIME = 24;
 
 
 def main(numUsers, ratProsumers):  
+
+	
 
 	percentageProsumers = ratProsumers;
 	percentageBuyers = 100 - ratProsumers;
@@ -167,7 +173,8 @@ def main(numUsers, ratProsumers):
 
 def LEM(Supplies_to_P2P, P2P_TOT, numBuyers,numSellers,time):
 
-	
+	public_key, private_key = paillier.generate_paillier_keypair()
+
 	global numToPlot;
 	numToPlot = min(10,numSellers) ;
 	
@@ -300,6 +307,55 @@ def plotPrices():
 	plt_price.xlabel("Seller Iteration")
 	plt_price.ylabel("Power Price (cents / kWh)")
 	plt_price.show()
+
+
+class ciphertext:
+    def __init__(self, a):
+        self.a = a;
+        self.B = [];
+
+def Enc(public_key,m):
+	
+	return ciphertext(public_key.encrypt(m));
+
+def Dec(private_key,ciphertext):
+	
+	decVal=private_key.decrypt(ciphertext.a);
+	for b in ciphertext.B:
+		decVal+= ( private_key.decrypt(b) **2 )
+	return decVal;
+
+def Add(c1,c2):
+	cRet = ciphertext(c1.a + c2.a);
+	cRet.B.extend(c1.B);
+	cRet.B.extend(c2.B);
+	return cRet;
+
+def Smul(cipher,k):
+	cRet = ciphertext(cipher.a * k)
+	
+	for i in range(len(cipher.B)):
+		cRet.B.append(cipher.B[i] *sqrt(k));
+
+	return cRet;
+
+def Squaring(public_key,cipher):
+	
+	if(len(cipher.B) != 0):
+		print('B should be empty');
+		exit()
+
+	r = random.randint(1,10);
+
+	B = cipher.a + (-1) * r; # m-r
+
+	a = (-1) * (r**2) + 2*r * cipher.a ;  # -r ^ 2 + 2rm
+
+	cRet = ciphertext(a);
+	cRet.B.append(B);
+
+	return cRet;
+
 
 if __name__ == '__main__':
 
