@@ -89,7 +89,7 @@ def main(numUsers, ratProsumers):
 	
 	for time in range(0, Total_TIME):
 
-		#print(f"time {time} ---------- ")
+		print(f"time {time} ---------- ")
 		
 		V_gen = df_gen.iloc[time].to_numpy()[0:numProsumers]
 		V_prosumer_con = df_prosumer_con.iloc[time].to_numpy()[0:numProsumers]
@@ -187,51 +187,69 @@ def LEM(Supplies_to_P2P, P2P_TOT, numBuyers,numSellers,time):
 
 	prices = [28, 24, 29, 35, 35, 37, 21, 35, 19, 22, 24, 23, 37, 17, 30, 33, 23, 37, 15, 29, 38, 14, 27, 29, 16, 18, 27, 35, 31, 17, 20, 13, 23, 14, 15, 20, 34, 30, 39, 9, 15, 20, 34, 25, 15, 20, 14, 29, 30, 34, 25, 27, 34, 13, 10, 11, 16, 31, 22, 15, 26, 38, 27, 12, 36, 10, 23, 34, 25, 33, 23, 27, 28, 24, 30, 26, 13, 15, 19, 28, 10, 32, 31, 10, 27, 25, 30, 20, 18, 11, 10, 9, 34, 9, 13, 33, 31, 12, 33, 26, 33, 38, 9, 34, 14, 25, 33, 28, 18, 30, 15, 12, 15, 13, 33, 12, 15, 19, 35, 19, 28, 9, 30, 15, 32, 30, 16, 32, 31, 20, 37, 21, 10, 14, 23, 24, 26, 17, 24, 39, 15, 12, 9, 14, 10, 12, 24, 12, 18, 20, 16, 24, 10, 18, 29, 28, 37, 20, 32, 36, 26, 11, 28, 15, 36, 21, 21, 33, 20, 28, 38, 24, 13, 28, 39, 39, 12, 17, 26, 33, 19, 9, 13, 11, 35, 36, 37, 28, 25, 10, 22, 19, 29, 12, 37, 38, 22, 25, 12, 27]
 	
+	if(time==PLOT_TIME):
+		Total_Worst_Case_Time_Sellers = 0;
+		Total_Worst_Case_Time_Buyers = 0;
+		Total_Buyer_aggregation_time = 0;
+
+	numIter = 0
 		
 	while(True):		
 		
+		numIter +=1;
 		appendPrices(prices);
 		
-		Worst_Case_Time_Sellers = 0;
+		if(time==PLOT_TIME):
+			Worst_Case_Time_Sellers = 0;
 
-		timer_ENC_HC = 0;
+			timer_ENC_HC = 0;
 
-		cipherPrices= [];
-		for seller in range(0,numSellers):	
-			ENC_HC_start = timer()
-			cipherPrices.append(Enc(public_key,prices[seller]));
-			ENC_HC_end = timer()
-			if((ENC_HC_end-ENC_HC_start)>timer_ENC_HC):
-				timer_ENC_HC = ENC_HC_end-ENC_HC_start;
-		
-		Worst_Case_Time_Sellers +=timer_ENC_HC;
+			cipherPrices= [];
+			for seller in range(0,numSellers):	
+				ENC_HC_start = timer()
+				cipherPrices.append(Enc(public_key,prices[seller]));
+				ENC_HC_end = timer()
+				if((ENC_HC_end-ENC_HC_start)>timer_ENC_HC):
+					timer_ENC_HC = ENC_HC_end-ENC_HC_start;
+			
+			Worst_Case_Time_Sellers +=timer_ENC_HC;
 
-		cipherWelfares , cipher_Wtot, Worst_Case_Time_Buyers,aggregation_time =  evolutionaryGame_Enc(public_key,private_key,cipherPrices,numBuyers,numSellers);
+			cipherWelfares , cipher_Wtot, Worst_Case_Time_Buyers, Buyer_aggregation_time = evolutionaryGame_Enc(public_key,private_key,cipherPrices,numBuyers,numSellers);
 
-		sellerWelfares_RND = [];	
+			sellerWelfares_RND = [];	
 
-		timer_DEC_HC = 0;				
+			timer_DEC_HC = 0;				
 
-		for C_welfare in cipherWelfares:
-			DEC_HC_start = timer()
-			sellerWelfares_RND.append(round(Dec(private_key,C_welfare),2));
-			DEC_HC_end = timer()
-			if((DEC_HC_end-DEC_HC_start)>timer_DEC_HC):
-				timer_DEC_HC = DEC_HC_end-DEC_HC_start;
-		
-		
-		Worst_Case_Time_Sellers +=timer_DEC_HC;
+			for C_welfare in cipherWelfares:
+				DEC_HC_start = timer()
+				sellerWelfares_RND.append(round(Dec(private_key,C_welfare),2));
+				DEC_HC_end = timer()
+				if((DEC_HC_end-DEC_HC_start)>timer_DEC_HC):
+					timer_DEC_HC = DEC_HC_end-DEC_HC_start;
+			
+			
+			Wtot_dec = Dec(private_key,cipher_Wtot)
+			Worst_Case_Time_Sellers +=timer_DEC_HC;
+
+			#print('Worst_Case_Time_Sellers',Worst_Case_Time_Sellers)
+			#print('Worst_Case_Time_Buyers',Worst_Case_Time_Buyers)
+			#print('Buyer_aggregation_time',Buyer_aggregation_time)
+
+			Total_Worst_Case_Time_Sellers += Worst_Case_Time_Sellers;
+			Total_Worst_Case_Time_Buyers += Worst_Case_Time_Buyers;
+			Total_Buyer_aggregation_time += Buyer_aggregation_time;
+			
 
 		#print('sellerWelfares_temp_RND',sellerWelfares_temp_RND);
-		print('sellerWelfares round',sellerWelfares_RND);
+		#print('sellerWelfares round',sellerWelfares_RND);
 
-		print('cipher_Wtot', Dec(private_key,cipher_Wtot))
+		#print('cipher_Wtot', Dec(private_key,cipher_Wtot))
 		
 		
 		
 		W_B_J , W_TOT = buyers_algorithm(prices, thetas, lambdas, numSellers);
-		print('W_B_J',W_B_J)
-		print('W_TOT',W_TOT)
+		#print('W_B_J',W_B_J)
+		#print('W_TOT',W_TOT)
 		
 		Demands = [P2P_TOT*W_B_J[s_j]/W_TOT for s_j in range(0,numSellers)]
 		
@@ -257,6 +275,10 @@ def LEM(Supplies_to_P2P, P2P_TOT, numBuyers,numSellers,time):
 				Total_P2P_Profit += Supplies_to_P2P[seller] * prices[seller];
 			
 			if(time==PLOT_TIME):
+				print('Total_Worst_Case_Time_Sellers',Total_Worst_Case_Time_Sellers)
+				print('Total_Worst_Case_Time_Buyers',Total_Worst_Case_Time_Buyers)
+				print('Total_Buyer_aggregation_time',Total_Buyer_aggregation_time)
+				print('numIter',numIter)
 				print(prices)
 				plotPrices();
 				plotDemand();	
@@ -376,7 +398,7 @@ def buyers_algorithm(prices, thetas, lambdas, numSellers):
     
     for j in range(N_S):
         for i in range(N_B):
-            X[j][i] = (lambdas[i] - prices[j]) / thetas[i]; #print('X[j][i]',X[j][i])           
+            X[j][i] = (lambdas[i] - prices[j]) / thetas[i]; #print(f'No X[{j}][{i}]',X[j][i])           
         W_B_J[j] = 0.5 * sum(thetas[i] * X[j][i]**2 for i in range(N_B))
     
     W_TOT = sum(W_B_J)
@@ -399,25 +421,22 @@ def evolutionaryGame_Enc(public_key,private_key,Enc_prices,numBuyers,numSellers)
 	
 	Worst_Case_Time_Buyers = 0 ;
 
-	for buyer in range(0,numBuyers):
+	for i in range(0,numBuyers):
 		Buyer_HC_start = timer()
-		for seller in range(0,numSellers):
-			temp = ciphertext (((-1) * Enc_prices[seller].a + Lambda ) * (1/Theta));
+		for j in range(0,numSellers):
+			X_Enc[j][i] = ciphertext (((-1) * Enc_prices[j].a + Lambda ) * (1/Theta));	
 		Buyer_HC_end = timer()
 		if((Buyer_HC_end-Buyer_HC_start)>Worst_Case_Time_Buyers):
 					Worst_Case_Time_Buyers = Buyer_HC_end-Buyer_HC_start;
 
-	print("Worst_Case_Time_Buyers",Worst_Case_Time_Buyers);
+	#print("Worst_Case_Time_Buyers",Worst_Case_Time_Buyers);
 
 	aggregation_time=0;
 
 	for j in range(0,numSellers):
-		for i in range(0,numBuyers):
-
-			X_Enc[j][i] = ciphertext (((-1) * Enc_prices[j].a + Lambda ) * (1/Theta));
-			
-			#print('X_Enc[{j}][{i}] ',Dec(private_key,X_Enc[j][i]))
-			
+		#for i in range(0,numBuyers):
+		#	print(f'X_Enc[{j}][{i}]',Dec(private_key, X_Enc[j][i]))
+					
 				
 		agg_start = timer();
 		W_B_J[j] = Smul(Squaring(public_key,X_Enc[j][0]),(Theta/2));
@@ -430,11 +449,19 @@ def evolutionaryGame_Enc(public_key,private_key,Enc_prices,numBuyers,numSellers)
 
 		aggregation_time += agg_end - agg_start;
 
-	print("aggregation_time",aggregation_time);
+	
 
+	Wtot_start = timer();
 	W_TOT = W_B_J[0]; 
 	for j in range(1,numSellers):
 		W_TOT= Add(W_TOT,W_B_J[j])
+	Wtot_end = timer();
+
+	Wtot_time = Wtot_end - Wtot_start;
+
+	aggregation_time += Wtot_time
+
+	#print("aggregation_time",aggregation_time);
 
 	return W_B_J, W_TOT, Worst_Case_Time_Buyers, aggregation_time;
 
