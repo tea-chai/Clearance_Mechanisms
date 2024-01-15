@@ -465,34 +465,45 @@ def evolutionaryGame_Enc(public_key,private_key,Enc_prices,numBuyers,numSellers)
 
 	return W_B_J, W_TOT, Worst_Case_Time_Buyers, aggregation_time;
 
-if __name__ == '__main__':
-
+if __name__ == '__main__':	
 	
-	main(40,50)
-	'''
+	print("40,25")
 	main(40,25)
+	print("80,25")
 	main(80,25)	
+	print("120,25")
 	main(120,25)
+	print("160,25")
 	main(160,25)
+	print("200,25")
 	main(200,25)
 
+	print("40,50")
 	main(40,50)
+	print("80,50")
 	main(80,50)
+	print("120,50")
 	main(120,50)
+	print("160,50")
 	main(160,50)
+	print("200,50")
 	main(200,50)
 
+	print("40,75")
 	main(40,75)
+	print("80,75")
 	main(80,75)
+	print("120,75")
 	main(120,75)
+	print("160,75")
 	main(160,75)
-	main(200,75)
-	'''
+	print("200,75")
+	main(200,75)	
 	
 	#winsound.Beep(frequency, duration)
 
 	print("Finished MMM!")
-	#main(100,50)
+	
 
 
 
