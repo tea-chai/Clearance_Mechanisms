@@ -228,7 +228,7 @@ def LEM(Supplies_to_P2P, P2P_TOT, numBuyers,numSellers,time):
 		sellerWelfares = sellerWelfares_RND;
 		
 		W_B_J , W_TOT = buyers_algorithm(prices, thetas, lambdas, numSellers);
-		
+		print('W_B_J',W_B_J)
 		quit()
 		Demands = [P2P_TOT*W_B_J[s_j]/W_TOT for s_j in range(0,numSellers)]
 		
