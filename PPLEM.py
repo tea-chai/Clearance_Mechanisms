@@ -206,7 +206,7 @@ def LEM(Supplies_to_P2P, P2P_TOT, numBuyers,numSellers,time):
 		
 		Worst_Case_Time_Sellers +=timer_ENC_HC;
 
-		cipherWelfares , Worst_Case_Time_Buyers,aggregation_time =  evolutionaryGame_Enc(public_key,cipherPrices);
+		cipherWelfares , cipher_Wtot, Worst_Case_Time_Buyers,aggregation_time =  evolutionaryGame_Enc(public_key,private_key,cipherPrices,numBuyers,numSellers);
 
 		sellerWelfares_RND = [];	
 
@@ -223,13 +223,16 @@ def LEM(Supplies_to_P2P, P2P_TOT, numBuyers,numSellers,time):
 		Worst_Case_Time_Sellers +=timer_DEC_HC;
 
 		#print('sellerWelfares_temp_RND',sellerWelfares_temp_RND);
-		print('sellerWelfares round   ',sellerWelfares_RND);
+		print('sellerWelfares round',sellerWelfares_RND);
+
+		print('cipher_Wtot', Dec(private_key,cipher_Wtot))
 		
-		sellerWelfares = sellerWelfares_RND;
+		
 		
 		W_B_J , W_TOT = buyers_algorithm(prices, thetas, lambdas, numSellers);
 		print('W_B_J',W_B_J)
-		quit()
+		print('W_TOT',W_TOT)
+		
 		Demands = [P2P_TOT*W_B_J[s_j]/W_TOT for s_j in range(0,numSellers)]
 		
 		appendDemands(Demands);
@@ -262,26 +265,6 @@ def LEM(Supplies_to_P2P, P2P_TOT, numBuyers,numSellers,time):
 			return Total_P2P_Profit;
 					
 
-def buyers_algorithm(prices, thetas, lambdas, numSellers):
-    
-	
-    N_B = len(lambdas)
-    N_S = numSellers
-   	
-    X = [[0] * N_B for _ in range(N_S)]
-    W_B_J = [0] * N_S
-     
-    
-    for j in range(N_S):
-        for i in range(N_B):
-            X[j][i] = (lambdas[i] - prices[j]) / thetas[i]; 
-	    	           
-        W_B_J[j] = 0.5 * sum(thetas[i] * X[j][i]**2 for i in range(N_B))
-    
-    W_TOT = sum(W_B_J)
-    
-    
-    return W_B_J, W_TOT
 
 
 
@@ -381,10 +364,37 @@ def Squaring(public_key,cipher):
 
 	return cRet;
 
-def evolutionaryGame_Enc(public_key,Enc_prices):
-	numBuyers =0
-	numSellers =0
-	a = Enc_prices[0];
+def buyers_algorithm(prices, thetas, lambdas, numSellers):
+    
+	
+    N_B = len(lambdas)
+    N_S = numSellers
+   	
+    X = [[0] * N_B for _ in range(N_S)]
+    W_B_J = [0] * N_S
+     
+    
+    for j in range(N_S):
+        for i in range(N_B):
+            X[j][i] = (lambdas[i] - prices[j]) / thetas[i]; #print('X[j][i]',X[j][i])           
+        W_B_J[j] = 0.5 * sum(thetas[i] * X[j][i]**2 for i in range(N_B))
+    
+    W_TOT = sum(W_B_J)
+    
+    
+    return W_B_J, W_TOT
+
+
+def evolutionaryGame_Enc(public_key,private_key,Enc_prices,numBuyers,numSellers):
+	
+	
+	N_B = numBuyers
+	N_S = numSellers
+   	
+	X_Enc = [[0] * N_B for _ in range(N_S)]
+	W_B_J = [0] * N_S
+
+
 	Enc_welfares=[];
 	
 	Worst_Case_Time_Buyers = 0 ;
@@ -401,40 +411,33 @@ def evolutionaryGame_Enc(public_key,Enc_prices):
 
 	aggregation_time=0;
 
-	for seller in range(0,numSellers):
-		
-		amountEnergy = [];
-		amountEnergy_Enc = [];
+	for j in range(0,numSellers):
+		for i in range(0,numBuyers):
 
-	
-		for buyer in range(0,numBuyers):
-
-			Xji_Enc = ciphertext (((-1) * Enc_prices[seller].a + Lambda ) * (1/Theta));
+			X_Enc[j][i] = ciphertext (((-1) * Enc_prices[j].a + Lambda ) * (1/Theta));
 			
+			#print('X_Enc[{j}][{i}] ',Dec(private_key,X_Enc[j][i]))
 			
-			amountEnergy_Enc.append(Xji_Enc);
 				
 		agg_start = timer();
-		Wbj_Enc = Smul(Squaring(public_key,amountEnergy_Enc[0]),(Theta/2));
-
-		
+		W_B_J[j] = Smul(Squaring(public_key,X_Enc[j][0]),(Theta/2));
+	
 		for buyer in range(1,numBuyers):
 
-			Wbj_Enc = Add( Wbj_Enc, Smul(Squaring(public_key,amountEnergy_Enc[buyer]),(Theta/2)))	
+			W_B_J[j] = Add( W_B_J[j] , Smul(Squaring(public_key,X_Enc[j][buyer]),(Theta/2)))	
 
 		agg_end = timer();
 
 		aggregation_time += agg_end - agg_start;
-		'''
-		if(Wbj != Dec(private_key,Wbj_Enc)):
-			print('ERROR : NOT EQUAL')
-			exit();
-		'''
-
-		Enc_welfares.append(Wbj_Enc);
 
 	print("aggregation_time",aggregation_time);
-	return Enc_welfares, Worst_Case_Time_Buyers,aggregation_time;
+
+	W_TOT = W_B_J[0]; 
+	for j in range(1,numSellers):
+		W_TOT= Add(W_TOT,W_B_J[j])
+
+	return W_B_J, W_TOT, Worst_Case_Time_Buyers, aggregation_time;
+
 if __name__ == '__main__':
 
 	
