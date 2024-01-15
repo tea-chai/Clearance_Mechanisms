@@ -1,4 +1,6 @@
 
+from Pyfhel import Pyfhel, PyPtxt, PyCtxt
+
 import numpy as np
 
 import matplotlib.pyplot as plt_demand
@@ -307,10 +309,6 @@ def plotPrices():
 
 if __name__ == '__main__':
 
-
-	
-	main(40,50)
-	'''
 	main(40,25)
 	main(80,25)	
 	main(120,25)
@@ -328,7 +326,7 @@ if __name__ == '__main__':
 	main(120,75)
 	main(160,75)
 	main(200,75)
-	'''
+	
 			
 	#winsound.Beep(frequency, duration)
 	print("Finished! MMM")
