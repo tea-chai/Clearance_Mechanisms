@@ -90,6 +90,8 @@ def main(numUsers, ratProsumers):
 		V_prosumer_con = df_prosumer_con.iloc[time].to_numpy()[0:numProsumers]
 		V_buyer_con = df_buyer_con.iloc[time].to_numpy()[0:numBuyers]
 	
+		if(time == PLOT_TIME):
+			print(V_gen[0:9])
 		
 		energyDifference = [V_gen[i] - V_prosumer_con[i] for i in range(numProsumers)]
 
@@ -223,6 +225,7 @@ def PFET(Supplies_to_P2P, numBuyers,numSellers,time):
 				Total_P2P_Profit += Supplies_to_P2P[seller]* prices[seller];
 			
 			if(time==PLOT_TIME):
+				print(Supplies_to_P2P[0:10])
 				plotPrices();
 				plotDemand();
 			clearPlots();
