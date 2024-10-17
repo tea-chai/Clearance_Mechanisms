@@ -1,3 +1,4 @@
-This repo consists of the code (non privacy-preserving version) for the paper:
+This repo consists of the code (non privacy-preserving version) for these papers:
 
-Privacy-Friendly Peer-to-Peer Energy Trading: A Game Theoretical Approach
+- PP-LEM: Efficient and Privacy-Preserving Clearance Mechanism for Local Energy Markets
+- Privacy-Friendly Peer-to-Peer Energy Trading: A Game Theoretical Approach
